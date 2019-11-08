@@ -1,13 +1,211 @@
 body {
+  background: #353433;
+  color: #e9e8e7;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 20px;
+  text-align: center;
+  overflow-x: hidden;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.loading {
+  color: #8b8685;
+}
+
+.loading p {
+  margin: 30px 0;
+}
+
+.Flipper {
+  margin: 20px auto 0;
+  position: relative;
+  background: #090807;
+  width: 100vw;
+  height: 100vw;
+  max-width: 440px;
+  max-height: 440px;
+  perspective: 880px;
+  user-select: none;
+}
+.Flipperのrotor,
+.Flipperのfront,
+.Flipperのback {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+.Flipperのrotor {
+  transform-style: preserve-3d;
+}
+.Flipper.is-flipped .Flipperのfront {
+  pointer-events: none;
+}
+.Flipper:not(.is-flipped) .Flipperのback {
+  pointer-events: none;
+}
+.Flipperのfront {
+  transform: rotateY(0deg);
+}
+.Flipperのback {
+  transform: rotateY(180deg);
+}
+.Flipperのfront,
+.Flipperのback {
+  backface-visibility: hidden;
+  transform-style: flat;
+}
+
+.err {
+  position: absolute;
+  appearance: none;
+  cursor: pointer;
+  background: #8b8685;
+  top: 0; right: 0; bottom: 0; left: 0; width: 100%; margin: 0;
+  text-align: center;
+  box-sizing: border-box;
+  border: 0;
+  font: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e9e8e7;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+  animation: 1.2s please-input-id linear;
+}
+.err-text {
+  display: block;
+  flex: 1;
+  text-align: center;
+}
+
+@keyframes please-input-id {
+  0% { transform: scale(1); }
+  40% { transform: scale(1); animation-timing-function: ease; }
+  50% { transform: scale(1.1); animation-timing-function: ease; }
+  60% { transform: scale(1); }
+  80% { transform: scale(1); animation-timing-function: ease; }
+  90% { transform: scale(1.1); animation-timing-function: ease; }
+  100% { transform: scale(1); }
+}
+
+.qrcode-container {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  cursor: pointer;
+}
+
+.qrcode {
+  animation: 0.5s here-be-qr linear;
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+
+.qrcode svg,
+.qrcode img,
+.qrcode canvas {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+}
+.qrcode canvas {
+  background: white;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.qr-explanation {
+  margin: 5px auto 20px;
+  color: #8b8685;
+  font-size: 12px;
+}
+
+@keyframes here-be-qr {
+  0% { transform: rotate(-480deg) scale(0); }
+  80% { transform: rotate(0deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.amount {
+  font-size: 36px;
+  color: #8b8685;
+}
+
+.amount input {
+  font: inherit;
+  width: 4em;
+  background: #090807;
+  border: 1px solid #454443;
+  color: #d7fc70;
+  text-align: right;
+}
+
+.tip {
+  font-size: 12px;
+  margin: 20px 0;
+  color: #8b8685;
+}
+
+.tip a {
+  color: #9b9695;
+  text-decoration: none;
+}
+
+h1 {
+  margin: 20px 0;
+  font-size: 32px;
+  color: #8b8685;
+}
+
+.SlotSelector {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: #454443;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #555453;
+}
+.SlotSelectorのitem {
+  height: 25%;
+  flex: 1;
+  box-sizing: border-box;
+  background: #252423;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  appearance: none;
+  display: flex;
+  align-items: center;
+  transition: 0.1s transform;
+  margin: 0;
+}
+.SlotSelectorのitem:not(:first-child) {
+  margin-top: 1px;
+}
+.SlotSelectorのitem:focus {
+  outline: none;
+}
+.SlotSelectorのitem.is-active {
+  background: #8b8685;
+}
+.SlotSelectorのitem:active {
+  transform: scale(0.95);
+}
+.SlotSelectorのnum {
+  display: block;
+  margin: 0 20px;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
+  text-align: center;
+  background: #454443;
+  font-weight: bold;
+  border-radius: 5px;
+}
+.SlotSelectorのitem.is-active .SlotSelectorのnum {
+  background: #e9e8e7;
+  color: #353433;
+}
+.SlotSelectorのinfo {
+  display: block;
+  flex: 1;
+  text-align: left;
 }

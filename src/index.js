@@ -1,12 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import './index.css'
+import 'pepjs'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import App from './App'
+import React from 'react'
+import { register } from './serviceWorker'
+import { render } from 'react-snapshot'
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+render(<App />, document.getElementById('root'))
+
+register({
+  onSuccess() {
+    // TODO: Display information that the app can be used offline
+  },
+  onUpdate() {
+    // TODO: Display information that an update is available
+  },
+})
+
+// var installPWA
+window.addEventListener('beforeinstallprompt', function(e) {
+  // installPWA = () => e.prompt()
+  // TODO: Display information that the app can be installed
+})

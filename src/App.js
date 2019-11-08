@@ -19,7 +19,20 @@ function sanitizeId(id) {
   return String(id).replace(/[^0-9]/g, '')
 }
 
-class App extends Component {
+function App() {
+  const [loaded, setLoaded] = React.useState(false)
+  React.useEffect(() => {
+    setLoaded(true)
+  }, [])
+  return (
+    <div>
+      <h1>ppqr.app</h1>
+      {loaded ? <AppMain /> : '(Loading...)'}
+    </div>
+  )
+}
+
+class AppMain extends Component {
   state = this.getInitialState()
   getInitialState() {
     const slotNumber = +window.localStorage.promptPayActiveSlot || 1
@@ -131,7 +144,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>ppqr.app</h1>
         <Flipper
           front={this.renderQR()}
           back={this.renderSlotSelector()}

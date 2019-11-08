@@ -15,7 +15,7 @@ const storageKeys = {
   4: 'promptpayID4',
 }
 
-function sanitizeId(id) {
+function sanitizeId(id: string) {
   return String(id).replace(/[^0-9]/g, '')
 }
 
@@ -41,7 +41,7 @@ class AppMain extends Component {
     )
     return {
       data: data,
-      slotNumber: slotNumber,
+      slotNumber: slotNumber as 1 | 2 | 3 | 4,
       amount: 0,
       flipped: false,
     }
@@ -58,10 +58,10 @@ class AppMain extends Component {
       window.localStorage[storageKeys[n]] = sanitizedId
     }
   }
-  onFlip = flipped => {
+  onFlip = (flipped: boolean) => {
     this.setState({ flipped })
   }
-  onSelectSlot = slot => {
+  onSelectSlot = (slot: number) => {
     this.setState({ slotNumber: slot, flipped: false })
     window.localStorage.promptPayActiveSlot = slot
     if (window.gtag) {
@@ -187,7 +187,7 @@ class AppMain extends Component {
   }
 }
 
-function t(th, en) {
+function t(th: string, en: string) {
   if (
     window.location.hostname === 'ppqr.app' ||
     window.location.hostname === 'promptpay2.me' ||

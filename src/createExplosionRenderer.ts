@@ -1,14 +1,17 @@
 import { mat4 } from 'gl-matrix'
-// @ts-check
 
-/**
- * @param {HTMLCanvasElement} canvas
- */
-export function createExplosionRenderer(canvas) {
-  /** @type {WebGLRenderingContext} */
-  const gl = canvas.getContext('webgl')
+export type Block = {
+  x: number
+  y: number
+  color: 0 | 1
+}
+
+export function createExplosionRenderer(canvas: HTMLCanvasElement) {
+  const gl = canvas.getContext('webgl')!
   if (!gl) {
-    throw new Error('Unable to initialize WebGL.')
+    throw new Error(
+      "Unable to initialize WebGL: canvas.getContext('webgl') failed.",
+    )
   }
 
   const vertexShaderCode = `
@@ -76,6 +79,9 @@ export function createExplosionRenderer(canvas) {
     fragmentShaderCode,
   )
   const program = gl.createProgram()
+  if (!program) {
+    throw new Error('Unable to initialize WebGL: createProgram() failed.')
+  }
   gl.attachShader(program, vertexShader)
   gl.attachShader(program, fragmentShader)
   gl.linkProgram(program)
@@ -108,7 +114,7 @@ export function createExplosionRenderer(canvas) {
   const uModelViewMatrix = gl.getUniformLocation(program, 'uModelViewMatrix')
   const uTime = gl.getUniformLocation(program, 'uTime')
 
-  function createRenderer(size) {
+  function createRenderer(size: number) {
     const fieldOfView = Math.atan2(1, 1.61) * 2
     const projectionMatrix = mat4.create()
     mat4.perspective(projectionMatrix, fieldOfView, 1, 0.01, 999)
@@ -120,7 +126,7 @@ export function createExplosionRenderer(canvas) {
     ])
     mat4.scale(modelViewMatrix, modelViewMatrix, [1, -1, 1])
 
-    let batches = []
+    let batches: any[] = []
     let requested = false
 
     function dispose() {
@@ -130,13 +136,13 @@ export function createExplosionRenderer(canvas) {
 
     return { render, addBlocks, dispose }
 
-    function addBlocks(items) {
-      const locations = []
-      const positions = []
-      const colors = []
-      const velocities = []
-      const rotationAxes = []
-      const rotationSpeeds = []
+    function addBlocks(items: Block[]) {
+      const locations: number[] = []
+      const positions: number[] = []
+      const colors: number[] = []
+      const velocities: number[] = []
+      const rotationAxes: number[] = []
+      const rotationSpeeds: number[] = []
       let vertices = 0
       items.forEach(({ x, y, color }) => {
         positions.push(0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1)
@@ -145,8 +151,9 @@ export function createExplosionRenderer(canvas) {
         const rSquared = wX ** 2 + wY ** 2 + 0.25
         const theta = Math.random() * Math.PI * 2
         const vx =
-          wX * 16 * (1 - Math.random() * 0.2) / rSquared + (Math.random() - 0.5)
-        const vy = wY * 16 * (1 - Math.random() * 0.2) / rSquared
+          (wX * 16 * (1 - Math.random() * 0.2)) / rSquared +
+          (Math.random() - 0.5)
+        const vy = (wY * 16 * (1 - Math.random() * 0.2)) / rSquared
         const vz = 8 / rSquared
         const rx = Math.cos(theta)
         const ry = Math.sin(theta)
@@ -280,10 +287,10 @@ export function createExplosionRenderer(canvas) {
     }
   }
 
-  let currentRenderer = null
-  let currentSize = null
+  let currentRenderer: ReturnType<typeof createRenderer> | null = null
+  let currentSize: number | null = null
   return {
-    setSize(size) {
+    setSize(size: number) {
       if (currentRenderer && size !== currentSize) {
         currentRenderer.dispose()
         currentRenderer = null
@@ -299,7 +306,7 @@ export function createExplosionRenderer(canvas) {
         currentRenderer = null
       }
     },
-    addBlocks(blocks) {
+    addBlocks(blocks: Block[]) {
       if (currentRenderer) {
         currentRenderer.addBlocks(blocks)
         currentRenderer.render()
@@ -308,14 +315,16 @@ export function createExplosionRenderer(canvas) {
   }
 }
 
-/**
- * @param {WebGLRenderingContext} gl
- * @param {string} name
- * @param {number} type
- * @param {string} source
- */
-function loadShader(gl, name, type, source) {
+function loadShader(
+  gl: WebGLRenderingContext,
+  name: string,
+  type: number,
+  source: string,
+) {
   const shader = gl.createShader(type)
+  if (!shader) {
+    throw new Error(`Cannot compile ${name}: createShader failed`)
+  }
   gl.shaderSource(shader, source)
   gl.compileShader(shader)
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {

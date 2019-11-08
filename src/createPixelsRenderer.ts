@@ -1,27 +1,16 @@
-import { createExplosionRenderer } from './createExplosionRenderer'
+import { createExplosionRenderer, Block } from './createExplosionRenderer'
 
-/**
- * Creates a fancy pixels renderer
- * @param {HTMLDivElement} el The element to render to
- */
-export default function createPixelsRenderer(el) {
+export type PixelPosition = { x: number; y: number }
+
+export default function createPixelsRenderer(el: HTMLDivElement) {
   let width = 0
   let height = 0
+  let canvas: HTMLCanvasElement
+  let explosion: ReturnType<typeof createExplosionRenderer>
+  let bgCanvas: HTMLCanvasElement
+  let previousBlackPixels: { [xy: string]: true } = {}
 
-  /**
-   * @type {HTMLCanvasElement}
-   */
-  let canvas
-  let explosion
-
-  /**
-   * @type {HTMLCanvasElement}
-   */
-  let bgCanvas
-
-  let previousBlackPixels = {}
-
-  function initCanvas(w, h) {
+  function initCanvas(w: number, h: number) {
     width = w
     height = h
     if (!bgCanvas) {
@@ -40,17 +29,19 @@ export default function createPixelsRenderer(el) {
     explosion.setSize(w)
   }
 
-  function updateSprites(pixels) {
-    const blackPixels = {}
-    const blocks = []
+  const k = (x: number, y: number) => [x, y].toString()
+
+  function updateSprites(pixels: PixelPosition[]) {
+    const blackPixels: { [xy: string]: true } = {}
+    const blocks: Block[] = []
     for (const { x, y } of pixels) {
-      blackPixels[[x, y]] = true
+      blackPixels[k(x, y)] = true
     }
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
-        if (!previousBlackPixels[[x, y]] && blackPixels[[x, y]]) {
+        if (!previousBlackPixels[k(x, y)] && blackPixels[k(x, y)]) {
           blocks.push({ x, y, color: 1 })
-        } else if (previousBlackPixels[[x, y]] && !blackPixels[[x, y]]) {
+        } else if (previousBlackPixels[k(x, y)] && !blackPixels[k(x, y)]) {
           blocks.push({ x, y, color: 0 })
         }
       }
@@ -59,8 +50,8 @@ export default function createPixelsRenderer(el) {
     explosion.addBlocks(blocks)
   }
 
-  function draw(pixels) {
-    const bgContext = bgCanvas.getContext('2d')
+  function draw(pixels: PixelPosition[]) {
+    const bgContext = bgCanvas.getContext('2d')!
     bgContext.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
     for (const { x, y } of pixels) {
       bgContext.fillRect(x * 8, y * 8, 8, 8)
@@ -68,7 +59,7 @@ export default function createPixelsRenderer(el) {
   }
 
   return {
-    update(w, h, pixels) {
+    update(w: number, h: number, pixels: PixelPosition[]) {
       if (w !== width || h !== height) {
         initCanvas(w, h)
       }

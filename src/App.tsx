@@ -5,6 +5,7 @@ import SlotSelector from './SlotSelector'
 import _ from 'lodash'
 import generatePayload from 'promptpay-qr'
 import QRCode from './QRCode'
+import { t } from './Localization'
 
 const ver = require('promptpay-qr/package.json').version
 
@@ -185,17 +186,6 @@ class AppMain extends Component {
       </div>
     )
   }
-}
-
-function t(th: string, en: string) {
-  if (
-    window.location.hostname === 'ppqr.app' ||
-    window.location.hostname === 'promptpay2.me' ||
-    window.location.hostname === 'dev.promptpay2.me'
-  ) {
-    return <span title={en}>{th}</span>
-  }
-  return <span title={th}>{en}</span>
 }
 
 export default App

@@ -5,6 +5,7 @@ import SlotSelector from './SlotSelector'
 import _ from 'lodash'
 import generatePayload from 'promptpay-qr'
 import QRCode from './QRCode'
+import { t } from './Localization'
 
 const ver = require('promptpay-qr/package.json').version
 
@@ -15,7 +16,7 @@ const storageKeys = {
   4: 'promptpayID4',
 }
 
-function sanitizeId(id) {
+function sanitizeId(id: string) {
   return String(id).replace(/[^0-9]/g, '')
 }
 
@@ -41,7 +42,7 @@ class AppMain extends Component {
     )
     return {
       data: data,
-      slotNumber: slotNumber,
+      slotNumber: slotNumber as 1 | 2 | 3 | 4,
       amount: 0,
       flipped: false,
     }
@@ -58,10 +59,10 @@ class AppMain extends Component {
       window.localStorage[storageKeys[n]] = sanitizedId
     }
   }
-  onFlip = flipped => {
+  onFlip = (flipped: boolean) => {
     this.setState({ flipped })
   }
-  onSelectSlot = slot => {
+  onSelectSlot = (slot: number) => {
     this.setState({ slotNumber: slot, flipped: false })
     window.localStorage.promptPayActiveSlot = slot
     if (window.gtag) {
@@ -185,17 +186,6 @@ class AppMain extends Component {
       </div>
     )
   }
-}
-
-function t(th, en) {
-  if (
-    window.location.hostname === 'ppqr.app' ||
-    window.location.hostname === 'promptpay2.me' ||
-    window.location.hostname === 'dev.promptpay2.me'
-  ) {
-    return <span title={en}>{th}</span>
-  }
-  return <span title={th}>{en}</span>
 }
 
 export default App

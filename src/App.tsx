@@ -1,11 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, useMemo, useState, useEffect } from 'react'
 
 import Flipper from './Flipper'
 import SlotSelector from './SlotSelector'
 import _ from 'lodash'
 import generatePayload from 'promptpay-qr'
 import QRCode from './QRCode'
-import { t } from './Localization'
+import { t, LocalizationProvider } from './Localization'
+import AppHeader from './AppHeader'
+
+// import { Button } from 'reakit/Button'
 
 const ver = require('promptpay-qr/package.json').version
 
@@ -21,14 +24,32 @@ function sanitizeId(id: string) {
 }
 
 function App() {
-  const [loaded, setLoaded] = React.useState(false)
-  React.useEffect(() => {
+  const [loaded, setLoaded] = useState(false)
+  const [language, setLanguage] = useState('th')
+
+  // const languageSwitcher = useMemo(() => {
+  //   const switchLanguage = () => setLanguage(language === 'th' ? 'en' : 'th')
+  //   return (
+  //     <Button
+  //       as="div"
+  //       style={{ padding: '0 10px', display: 'flex', alignItems: 'center' }}
+  //       onClick={switchLanguage}
+  //     >
+  //       {language}
+  //     </Button>
+  //   )
+  // }, [language])
+
+  useEffect(() => {
     setLoaded(true)
   }, [])
+
   return (
     <div>
-      <h1>ppqr.app</h1>
-      {loaded ? <AppMain /> : '(Loading...)'}
+      <AppHeader />
+      <LocalizationProvider value={language}>
+        {loaded ? <AppMain /> : <p className="loading">Loading...</p>}
+      </LocalizationProvider>
     </div>
   )
 }

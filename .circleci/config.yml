@@ -21,7 +21,7 @@ jobs:
       - run:
           command: yarn build
       - run:
-          command: env PORT=3000 yarn http-server
+          command: env PORT=3000 yarn http-server build
           background: true
       - run:
           command: yarn prescript e2e/tests/QRCode-generation.js

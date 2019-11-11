@@ -6,7 +6,12 @@ import React from 'react'
 import { register } from './serviceWorker'
 import { render } from 'react-snapshot'
 
-render(<App />, document.getElementById('root'))
+render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root'),
+)
 
 register({
   onSuccess() {

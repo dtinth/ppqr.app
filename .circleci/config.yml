@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12-browsers
+    steps:
+      - add_ssh_keys
+      - checkout
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      - run:
+          command: yarn build
+      - run:
+          command: env PORT=3000 yarn http-server build
+          background: true
+      - run:
+          command: yarn prescript e2e/tests/QRCode-generation.js
+      - run:
+          command: npx --package=@percy/agent percy upload e2e/screenshots/
+      - store_artifacts:
+          path: e2e/error-shots
+          destination: error-shots

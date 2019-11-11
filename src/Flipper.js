@@ -16,9 +16,9 @@ class Flipper extends React.Component {
     }, this.onFlip)
     this.animator.setFlipped(!!this.props.flipped)
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.flipped !== this.props.flipped) {
-      this.animator.setFlipped(!!nextProps.flipped)
+  componentDidUpdate(prevProps) {
+    if (prevProps.flipped !== this.props.flipped) {
+      this.animator.setFlipped(!!this.props.flipped)
     }
   }
   onFlip = flipped => {
@@ -34,7 +34,7 @@ class Flipper extends React.Component {
     if (!this.activePointer) return
     if (this.activePointer.pointerId !== e.pointerId) return
     const delta =
-      (e.clientX - this.activePointer.lastX) / this.el.offsetWidth * 180
+      ((e.clientX - this.activePointer.lastX) / this.el.offsetWidth) * 180
     this.activePointer.lastX = e.clientX
     this.animator.pointerMove(delta)
   }
@@ -125,7 +125,7 @@ function createFlipperModel(setRotationDegrees, onFlip) {
   // The animation frame. Calls update (handle frameskip) and draw.
   function frame() {
     if (!animationActive) return
-    const expectedFrameNumber = (Date.now() - animationStartTime) / 1000 * 60
+    const expectedFrameNumber = ((Date.now() - animationStartTime) / 1000) * 60
     const updateCount = Math.min(expectedFrameNumber - lastFrameNumber, 10)
     lastFrameNumber = expectedFrameNumber
     for (let i = 0; i < updateCount; i++) {
@@ -236,7 +236,7 @@ function createFlipperModel(setRotationDegrees, onFlip) {
 
       // Set the rotation speed to the ending speed of dragging.
       if (history.length > 0) {
-        const dt = (Date.now() - history[0].time) / 1000 * 60
+        const dt = ((Date.now() - history[0].time) / 1000) * 60
         const dx = current - history[0].current
         const dragSpeed = Math.max(-25, Math.min(25, dx / dt))
         currentSpeed = dragSpeed

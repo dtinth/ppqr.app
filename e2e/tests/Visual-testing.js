@@ -1,4 +1,4 @@
-const { test, to, action, defer, pending, named } = require('prescript')
+const { action, defer } = require('prescript')
 const {
   openBrowser,
   goto,
@@ -20,6 +20,7 @@ action('Open app', async () => {
   await emulateDevice('iPhone 8')
   await goto('http://localhost:3000')
 })
+snap('Initial')
 action('Set PromptPay ID', async () => {
   prompt(
     'Your PromptPay ID (phone number or e-Wallet ID)',
@@ -30,7 +31,11 @@ action('Set PromptPay ID', async () => {
   // This is less than ideal...
   await new Promise(r => setTimeout(r, 2000))
 })
-action('Screenshot', async () => {
-  require('mkdirp').sync('e2e/screenshots')
-  await screenshot({ path: 'e2e/screenshots/Main.png' })
-})
+snap('Main')
+
+function snap(name) {
+  action('Screenshot: ' + name, async () => {
+    require('mkdirp').sync('e2e/screenshots')
+    await screenshot({ path: `e2e/screenshots/${name}.png` })
+  })
+}

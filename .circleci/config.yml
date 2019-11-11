@@ -27,3 +27,6 @@ jobs:
           command: yarn prescript e2e/tests/QRCode-generation.js
       - run:
           command: npx --package=@percy/agent percy upload e2e/screenshots/
+      - store_artifacts:
+          path: e2e/error-shots
+          destination: error-shots

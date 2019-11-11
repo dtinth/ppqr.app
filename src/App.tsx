@@ -1,4 +1,4 @@
-import React, { Component, useMemo, useState, useEffect } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 
 import Flipper from './Flipper'
 import SlotSelector from './SlotSelector'
@@ -26,7 +26,7 @@ function sanitizeId(id: string) {
 function App() {
   type AppStage = 'loading' | 'onboarding' | 'main'
   const [stage, setStage] = useState<AppStage>('loading')
-  const [language, setLanguage] = useState('th')
+  const [language] = useState('th')
 
   // const languageSwitcher = useMemo(() => {
   //   const switchLanguage = () => setLanguage(language === 'th' ? 'en' : 'th')

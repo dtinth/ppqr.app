@@ -24,7 +24,8 @@ function sanitizeId(id: string) {
 }
 
 function App() {
-  const [loaded, setLoaded] = useState(false)
+  type AppStage = 'loading' | 'onboarding' | 'main'
+  const [stage, setStage] = useState<AppStage>('loading')
   const [language, setLanguage] = useState('th')
 
   // const languageSwitcher = useMemo(() => {
@@ -41,14 +42,15 @@ function App() {
   // }, [language])
 
   useEffect(() => {
-    setLoaded(true)
+    setStage('main')
   }, [])
 
   return (
     <div>
       <AppHeader />
       <LocalizationProvider value={language}>
-        {loaded ? <AppMain /> : <p className="loading">Loading...</p>}
+        {stage === 'main' && <AppMain />}
+        {stage === 'loading' && <p className="loading">Loading...</p>}
       </LocalizationProvider>
     </div>
   )

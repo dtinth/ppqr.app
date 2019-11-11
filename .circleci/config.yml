@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12-browsers
+    steps:
+      - add_ssh_keys
+      - checkout
+      - run: yarn
+      - run:
+          command: yarn build
+      - run:
+          command: env PORT=3000 yarn http-server
+          background: true
+      - run:
+          command: yarn prescript e2e/tests/QRCode-generation.js
+      - run:
+          command: npx --package=@percy/agent percy upload e2e/screenshots/

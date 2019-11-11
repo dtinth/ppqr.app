@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "@percy/puppeteer": "^1.0.8",
+    "http-server": "^0.11.1",
     "mkdirp": "^0.5.1",
     "prescript": "^0.555555.0",
     "taiko": "^1.0.2"

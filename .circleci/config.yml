@@ -4,6 +4,9 @@ jobs:
     docker:
       - image: circleci/node:12-browsers
     steps:
+      - run:
+          name: Install Thai fonts
+          command: sudo apt-get update && sudo apt-get install -y fonts-thai-tlwg --no-install-recommends
       - add_ssh_keys
       - checkout
       - restore_cache:

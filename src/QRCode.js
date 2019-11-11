@@ -8,9 +8,9 @@ class QRCode extends React.Component {
     this.renderer = createPixelsRenderer(this.div)
     this.update(this.props.payload)
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.payload !== this.props.payload) {
-      this.update(nextProps.payload)
+  componentDidUpdate(prevProps) {
+    if (prevProps.payload !== this.props.payload) {
+      this.update(this.props.payload)
     }
   }
   componentWillUnmount() {

@@ -27,3 +27,10 @@ window.addEventListener('beforeinstallprompt', function(e) {
   // installPWA = () => e.prompt()
   // TODO: Display information that the app can be installed
 })
+
+if (localStorage.PPQR_CUSTOM_CSS) {
+  const style = document.createElement('style')
+  style.textContent = localStorage.PPQR_CUSTOM_CSS
+  style.id = 'ppqr-custom-css'
+  document.head.appendChild(style)
+}

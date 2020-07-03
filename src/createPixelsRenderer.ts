@@ -8,6 +8,8 @@ export default function createPixelsRenderer(el: HTMLDivElement) {
   let canvas: HTMLCanvasElement
   let explosion: ReturnType<typeof createExplosionRenderer>
   let bgCanvas: HTMLCanvasElement
+  let maskCanvas: HTMLCanvasElement
+  let maskDiv: HTMLDivElement
   let previousBlackPixels: { [xy: string]: true } = {}
 
   function initCanvas(w: number, h: number) {
@@ -27,6 +29,55 @@ export default function createPixelsRenderer(el: HTMLDivElement) {
       el.appendChild(canvas)
     }
     explosion.setSize(w)
+
+    if (!maskCanvas) {
+      maskCanvas = document.createElement('canvas')
+      maskDiv = document.createElement('div')
+      maskDiv.className = 'qrcode-artistic-mask'
+      el.appendChild(maskDiv)
+    }
+    drawMask(w)
+    maskDiv.style.webkitMaskImage = `url("${maskCanvas.toDataURL()}")`
+    maskDiv.style.webkitMaskSize = `cover`
+  }
+
+  function drawMask(size: number) {
+    const g = 16
+    const dotSize = 0.2
+    maskCanvas.width = size * g
+    maskCanvas.height = size * g
+    const ctx = maskCanvas.getContext('2d')!
+    maskCanvas.style.opacity = '0.5'
+    ctx.clearRect(0, 0, size * g, size * g)
+    ctx.fillStyle = '#000'
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    ctx.lineTo(size * g, 0)
+    ctx.lineTo(size * g, size * g)
+    ctx.lineTo(0, size * g)
+    ctx.closePath()
+    for (let y = 4; y < size - 4; y++) {
+      for (let x = 4; x < size - 4; x++) {
+        ctx.ellipse(
+          (x + 0.5) * g,
+          (y + 0.5) * g,
+          dotSize * g,
+          dotSize * g,
+          0,
+          Math.PI * 2,
+          0,
+          true,
+        )
+        ctx.closePath()
+      }
+    }
+    ctx.fill()
+    ctx.clearRect(4 * g, 4 * g, 7 * g, 7 * g)
+    ctx.clearRect((size - 11) * g, 4 * g, 7 * g, 7 * g)
+    ctx.clearRect(4 * g, (size - 11) * g, 7 * g, 7 * g)
+    ctx.clearRect(10 * g, 10 * g, g, (size - 21) * g)
+    ctx.clearRect(10 * g, 10 * g, (size - 21) * g, g)
+    ctx.clearRect((size - 13) * g, (size - 13) * g, 5 * g, 5 * g)
   }
 
   const k = (x: number, y: number) => [x, y].toString()

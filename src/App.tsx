@@ -111,7 +111,12 @@ class AppMain extends Component {
     } else {
       const payload = generatePayload(id, { amount: this.state.amount })
       return (
-        <div className="qrcode-container" onClick={this.onSet}>
+        <div
+          className="qrcode-container"
+          onClick={this.onSet}
+          data-promptpay-id={id}
+          data-slot={this.state.slotNumber}
+        >
           <QRCode payload={payload} />
         </div>
       )

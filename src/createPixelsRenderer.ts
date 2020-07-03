@@ -43,7 +43,7 @@ export default function createPixelsRenderer(el: HTMLDivElement) {
 
   function drawMask(size: number) {
     const g = 16
-    const dotSize = 0.2
+    const dotSize = 0.175
     maskCanvas.width = size * g
     maskCanvas.height = size * g
     const ctx = maskCanvas.getContext('2d')!

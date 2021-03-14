@@ -189,6 +189,7 @@ class AppMain extends Component {
           <input
             className="amount"
             type="number"
+            inputMode="decimal"
             step={0.01}
             min={0}
             onChange={e => {

@@ -43,6 +43,7 @@ function App() {
 
   useEffect(() => {
     setStage('main')
+    // setStage('onboarding')
   }, [])
 
   return (

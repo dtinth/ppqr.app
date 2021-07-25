@@ -21,14 +21,11 @@ action('Open app', async () => {
   await goto('http://localhost:3000')
 })
 action('Set PromptPay ID', async () => {
-  prompt(
-    'Your PromptPay ID (phone number or e-Wallet ID)',
-    async () => await accept('0812345678'),
-  )
+  prompt(/PromptPay/, async () => await accept('0812345678'))
   await click('กดที่นี่เพื่อตั้งค่ารหัสพร้อมเพย์')
 
   // This is less than ideal...
-  await new Promise(r => setTimeout(r, 2000))
+  await new Promise((r) => setTimeout(r, 2000))
 })
 action('Screenshot', async () => {
   require('mkdirp').sync('e2e/screenshots')

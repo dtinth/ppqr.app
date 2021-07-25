@@ -1,33 +1,39 @@
-const { test, to, action, defer, pending, named } = require('prescript')
-const {
-  openBrowser,
-  goto,
-  emulateDevice,
-  click,
-  prompt,
-  accept,
-  screenshot,
-  closeBrowser,
-} = require('taiko')
+// @ts-check
 
-action('Open browser', async () => {
-  await openBrowser()
+const { action, defer, getCurrentState } = require('prescript')
+const { chromium, devices } = require('playwright')
+
+action('Open browser', async (state) => {
+  const browser = await chromium.launch()
+  const context = await browser.newContext({ ...devices['iPhone 8'] })
+  state.browser = browser
+  state.page = await context.newPage()
 })
 defer('Open browser', async () => {
-  await closeBrowser()
+  await getBrowser().close()
 })
 action('Open app', async () => {
-  await emulateDevice('iPhone 8')
-  await goto('http://localhost:3000')
+  await getPage().goto('http://localhost:3000')
 })
 action('Set PromptPay ID', async () => {
-  prompt(/PromptPay/, async () => await accept('0812345678'))
-  await click('กดที่นี่เพื่อตั้งค่ารหัสพร้อมเพย์')
+  const page = getPage()
+  page.on('dialog', (dialog) => dialog.accept('0812345678'))
+  await page.click('text=กดที่นี่เพื่อตั้งค่ารหัสพร้อมเพย์')
 
   // This is less than ideal...
   await new Promise((r) => setTimeout(r, 2000))
 })
 action('Screenshot', async () => {
   require('mkdirp').sync('e2e/screenshots')
-  await screenshot({ path: 'e2e/screenshots/Main.png' })
+  await getPage().screenshot({ path: 'e2e/screenshots/Main.png' })
 })
+
+/** @returns {import('playwright').Browser} */
+function getBrowser() {
+  return /** @type {any} */ (getCurrentState()).browser
+}
+
+/** @returns {import('playwright').Page} */
+function getPage() {
+  return /** @type {any} */ (getCurrentState()).page
+}

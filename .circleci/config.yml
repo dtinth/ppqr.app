@@ -31,7 +31,7 @@ jobs:
       - run:
           command: yarn test
       - run:
-          command: npx --package=@percy/agent percy upload e2e/screenshots/
+          command: npx --package=@percy/cli percy upload e2e/screenshots/
       - store_artifacts:
           path: e2e/error-shots
           destination: error-shots

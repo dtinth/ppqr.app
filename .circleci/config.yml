@@ -27,6 +27,8 @@ jobs:
           command: env PORT=3000 yarn http-server build
           background: true
       - run:
+          command: yarn playwright install
+      - run:
           command: yarn test
       - run:
           command: npx --package=@percy/agent percy upload e2e/screenshots/

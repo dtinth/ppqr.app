@@ -1,4 +1,3 @@
-import Pointable from 'react-pointable'
 import React from 'react'
 
 // Flipper is a component that has two sides: front-side and back-side.
@@ -11,7 +10,7 @@ import React from 'react'
 //
 class Flipper extends React.Component {
   componentDidMount() {
-    this.animator = createFlipperModel(degrees => {
+    this.animator = createFlipperModel((degrees) => {
       this.el.style.transform = `rotateY(${degrees}deg)`
     }, this.onFlip)
     this.animator.setFlipped(!!this.props.flipped)
@@ -21,16 +20,16 @@ class Flipper extends React.Component {
       this.animator.setFlipped(!!this.props.flipped)
     }
   }
-  onFlip = flipped => {
+  onFlip = (flipped) => {
     if (this.props.onFlip) this.props.onFlip(flipped)
   }
-  onPointerDown = e => {
+  onPointerDown = (e) => {
     if (!this.activePointer) {
       this.activePointer = { pointerId: e.pointerId, lastX: e.clientX }
       this.animator.pointerDown()
     }
   }
-  onPointerMove = e => {
+  onPointerMove = (e) => {
     if (!this.activePointer) return
     if (this.activePointer.pointerId !== e.pointerId) return
     const delta =
@@ -38,17 +37,17 @@ class Flipper extends React.Component {
     this.activePointer.lastX = e.clientX
     this.animator.pointerMove(delta)
   }
-  onPointerUp = e => {
+  onPointerUp = (e) => {
     this.animator.pointerUp()
     this.activePointer = null
   }
-  onPointerCancel = e => {
+  onPointerCancel = (e) => {
     this.animator.pointerUp()
     this.activePointer = null
   }
   render() {
     return (
-      <Pointable
+      <div
         style={{ touchAction: 'pan-y' }}
         touchAction="pan-y"
         onPointerDown={this.onPointerDown}
@@ -59,7 +58,7 @@ class Flipper extends React.Component {
         <div className={'Flipper' + (this.props.flipped ? ' is-flipped' : '')}>
           <div
             className="Flipperのrotor"
-            ref={el => {
+            ref={(el) => {
               this.el = el
             }}
           >
@@ -67,7 +66,7 @@ class Flipper extends React.Component {
             <div className="Flipperのback">{this.props.back}</div>
           </div>
         </div>
-      </Pointable>
+      </div>
     )
   }
 }

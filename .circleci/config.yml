@@ -27,9 +27,11 @@ jobs:
           command: env PORT=3000 yarn http-server build
           background: true
       - run:
-          command: yarn prescript e2e/tests/QRCode-generation.js
+          command: yarn playwright install
       - run:
-          command: npx --package=@percy/agent percy upload e2e/screenshots/
+          command: yarn test
+      - run:
+          command: npx --package=@percy/cli percy upload e2e/screenshots/
       - store_artifacts:
           path: e2e/error-shots
           destination: error-shots

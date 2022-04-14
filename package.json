@@ -24,7 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && react-snapshot",
-    "test": "react-scripts test",
+    "test": "playwright test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -43,9 +43,8 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.21.0",
     "http-server": "^0.11.1",
-    "mkdirp": "^0.5.1",
-    "playwright": "^1.13.0",
-    "prescript": "^0.555555.0"
+    "mkdirp": "^0.5.1"
   }
 }

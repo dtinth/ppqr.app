@@ -25,6 +25,7 @@ export default function createPixelsRenderer(el: HTMLDivElement) {
     if (!canvas) {
       canvas = document.createElement('canvas')
       canvas.style.background = 'transparent'
+      canvas.classList.add('qr-explosion')
       explosion = createExplosionRenderer(canvas)
       el.appendChild(canvas)
     }

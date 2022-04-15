@@ -1,0 +1,36 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install Thai fonts
+        run: sudo apt-get update && sudo apt-get install -y fonts-thai-tlwg --no-install-recommends
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: yarn
+      - name: Install dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Install Playwright
+        run: yarn playwright install
+      - name: Test
+        run: yarn start-server-and-test start-server http://localhost:3000 test
+      - name: Percy
+        run: npx @percy/cli upload e2e/screenshots/
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}

@@ -60,7 +60,7 @@ class AppMain extends Component {
   state = this.getInitialState()
   getInitialState() {
     const slotNumber = +window.localStorage.promptPayActiveSlot || 1
-    const data = _.mapValues(storageKeys, storageKey =>
+    const data = _.mapValues(storageKeys, (storageKey) =>
       sanitizeId(window.localStorage[storageKey] || ''),
     )
     return {
@@ -182,7 +182,7 @@ class AppMain extends Component {
         <div className="qr-explanation">{this.renderExplanation()}</div>
         <form
           className="amount"
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault()
           }}
         >
@@ -192,7 +192,7 @@ class AppMain extends Component {
             inputMode="decimal"
             step={0.01}
             min={0}
-            onChange={e => {
+            onChange={(e) => {
               this.setState({ amount: +e.target.value })
             }}
             autoFocus

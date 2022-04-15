@@ -22,7 +22,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && react-snapshot",
+    "start-server": "env PORT=3000 http-server build",
+    "build": "react-scripts build",
     "test": "playwright test",
     "eject": "react-scripts eject"
   },
@@ -45,6 +46,7 @@
     "@playwright/test": "^1.21.0",
     "http-server": "^0.11.1",
     "mkdirp": "^0.5.1",
+    "start-server-and-test": "^1.14.0",
     "tailwindcss": "^3.0.24"
   }
 }

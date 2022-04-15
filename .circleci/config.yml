@@ -35,3 +35,10 @@ jobs:
       - store_artifacts:
           path: e2e/error-shots
           destination: error-shots
+workflows:
+  dummy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: /^$/

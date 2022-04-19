@@ -1,7 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
 
-import { parse } from 'querystring'
-
 import Flipper from './Flipper'
 import SlotSelector from './SlotSelector'
 import _ from 'lodash'

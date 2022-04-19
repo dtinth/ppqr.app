@@ -77,8 +77,6 @@ class AppMain extends Component {
       amount?: string
     } = (window.location.search.slice(1) ?? '').split('&').map(o => [o.split('=')[0], o.split('=')[1]]).reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {})
     if ((parsedQueryString?.amount ?? '').length !== 0 && !Number.isNaN(Number(parsedQueryString?.amount))) {
-      console.log('ok')
-      console.log(Number(parsedQueryString?.amount))
       this.setState({ amount: Number(parsedQueryString?.amount) })
     }
   }

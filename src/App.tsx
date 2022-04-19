@@ -1,5 +1,7 @@
 import React, { Component, useState, useEffect } from 'react'
 
+import { parse } from 'querystring'
+
 import Flipper from './Flipper'
 import SlotSelector from './SlotSelector'
 import _ from 'lodash'
@@ -68,6 +70,16 @@ class AppMain extends Component {
       slotNumber: slotNumber as 1 | 2 | 3 | 4,
       amount: 0,
       flipped: false,
+    }
+  }
+  componentDidMount() {
+    const parsedQueryString: {
+      amount?: string
+    } = (window.location.search.slice(1) ?? '').split('&').map(o => [o.split('=')[0], o.split('=')[1]]).reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {})
+    if ((parsedQueryString?.amount ?? '').length !== 0 && !Number.isNaN(Number(parsedQueryString?.amount))) {
+      console.log('ok')
+      console.log(Number(parsedQueryString?.amount))
+      this.setState({ amount: Number(parsedQueryString?.amount) })
     }
   }
   onSet = () => {
@@ -192,6 +204,7 @@ class AppMain extends Component {
             inputMode="decimal"
             step={0.01}
             min={0}
+            value={this.state.amount}
             onChange={(e) => {
               this.setState({ amount: +e.target.value })
             }}

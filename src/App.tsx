@@ -71,12 +71,9 @@ class AppMain extends Component {
     }
   }
   componentDidMount() {
-    const parsedQueryString: {
-      amount?: string
-    } = (window.location.search.slice(1) ?? '').split('&').map(o => [o.split('=')[0], o.split('=')[1]]).reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {})
-    if ((parsedQueryString?.amount ?? '').length !== 0 && !Number.isNaN(Number(parsedQueryString?.amount))) {
-      this.setState({ amount: Number(parsedQueryString?.amount) })
-    }
+    const searchParams = new URLSearchParams(location.search)
+    const amount = +searchParams.get('amount')
+    if (amount) this.setState({ amount })
   }
   onSet = () => {
     const id = window.prompt(

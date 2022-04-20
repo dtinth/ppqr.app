@@ -5,12 +5,12 @@
   "dependencies": {
     "@types/gl-matrix": "^2.4.5",
     "@types/jest": "^24.0.22",
-    "@types/lodash": "^4.14.146",
     "@types/node": "^12.12.6",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.4",
+    "cra-preact": "^0.4.0",
     "gl-matrix": "^3.1.0",
-    "pepjs": "^0.5.2",
+    "preact-render-to-string": "^5.1.21",
     "promptpay-qr": "^0.4.4",
     "qrcode": "0.9.0",
     "react": "^18.0.0",
@@ -21,9 +21,9 @@
     "typescript": "^3.7.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cra-preact start",
     "start-server": "env PORT=3000 http-server build",
-    "build": "react-scripts build",
+    "build": "cra-preact build",
     "test": "playwright test",
     "eject": "react-scripts eject"
   },

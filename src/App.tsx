@@ -71,8 +71,8 @@ class AppMain extends Component {
     }
   }
   componentDidMount() {
-    const searchParams = new URLSearchParams(location.search)
-    const amount = +searchParams.get('amount')
+    const searchParams = new URLSearchParams(window.location.search)
+    const amount = +(searchParams.get('amount') ?? '0')
     if (amount) this.setState({ amount })
   }
   onSet = () => {

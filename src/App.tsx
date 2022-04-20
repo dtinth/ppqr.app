@@ -70,6 +70,11 @@ class AppMain extends Component {
       flipped: false,
     }
   }
+  componentDidMount() {
+    const searchParams = new URLSearchParams(window.location.search)
+    const amount = +(searchParams.get('amount') ?? '0')
+    if (amount) this.setState({ amount })
+  }
   onSet = () => {
     const id = window.prompt(
       'Your PromptPay ID (phone number or e-Wallet ID)',
@@ -192,6 +197,7 @@ class AppMain extends Component {
             inputMode="decimal"
             step={0.01}
             min={0}
+            value={this.state.amount}
             onChange={(e) => {
               this.setState({ amount: +e.target.value })
             }}

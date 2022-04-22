@@ -1,5 +1,3 @@
-import React from 'react'
-import _ from 'lodash'
 import './SlotSelector.css'
 
 export function SlotSelector(props) {
@@ -16,7 +14,7 @@ export function SlotSelector(props) {
           >
             <span className="SlotSelectorのnum">{i}</span>
             <span className="SlotSelectorのinfo">
-              {renderInfo(_.get(props.data, [i]))}
+              {renderInfo(props.data[i])}
             </span>
           </button>
         )

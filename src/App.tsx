@@ -2,13 +2,10 @@ import React, { Component, useState, useEffect } from 'react'
 
 import Flipper from './Flipper'
 import SlotSelector from './SlotSelector'
-import _ from 'lodash'
 import generatePayload from 'promptpay-qr'
 import QRCode from './QRCode'
 import { t, LocalizationProvider } from './Localization'
 import AppHeader from './AppHeader'
-
-// import { Button } from 'reakit/Button'
 
 const ver = require('promptpay-qr/package.json').version
 
@@ -60,9 +57,13 @@ class AppMain extends Component {
   state = this.getInitialState()
   getInitialState() {
     const slotNumber = +window.localStorage.promptPayActiveSlot || 1
-    const data = _.mapValues(storageKeys, (storageKey) =>
-      sanitizeId(window.localStorage[storageKey] || ''),
+    const data = Object.fromEntries(
+      Object.entries(storageKeys).map(([index, storageKey]) => [
+        index,
+        sanitizeId(window.localStorage[storageKey] || ''),
+      ]),
     )
+
     return {
       data: data,
       slotNumber: slotNumber as 1 | 2 | 3 | 4,

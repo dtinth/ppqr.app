@@ -1,9 +1,9 @@
 import Flipper from './Flipper'
-import React from 'react'
+import { Component } from 'react'
 import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
 
-const Side = props => {
+const Side = (props) => {
   return (
     <div
       style={{
@@ -23,7 +23,7 @@ const Side = props => {
 const front = <Side background="#456789">FRONT</Side>
 const back = <Side background="#987654">BACK</Side>
 
-class FlipperContainer extends React.Component {
+class FlipperContainer extends Component {
   state = { flipped: false }
   render() {
     return (
@@ -32,7 +32,7 @@ class FlipperContainer extends React.Component {
           <input
             type="checkbox"
             checked={this.state.flipped}
-            onChange={({ target: { checked: flipped } }) =>
+            onInput={({ target: { checked: flipped } }) =>
               this.setState({ flipped })
             }
           />
@@ -42,7 +42,7 @@ class FlipperContainer extends React.Component {
           front={front}
           back={back}
           flipped={this.state.flipped}
-          onFlip={flipped => {
+          onFlip={(flipped) => {
             this.setState({ flipped })
             this.props.onFlip(flipped)
           }}

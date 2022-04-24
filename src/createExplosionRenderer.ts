@@ -130,7 +130,7 @@ export function createExplosionRenderer(canvas: HTMLCanvasElement) {
     let requested = false
 
     function dispose() {
-      batches.forEach(b => b.dispose())
+      batches.forEach((b) => b.dispose())
       batches = []
     }
 

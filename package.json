@@ -1,52 +1,31 @@
 {
-  "name": "ppqr.app",
-  "version": "0.1.0",
+  "name": "ppqr",
   "private": true,
-  "dependencies": {
-    "@types/gl-matrix": "^2.4.5",
-    "@types/jest": "^24.0.22",
-    "@types/node": "^12.12.6",
-    "@types/react": "^16.9.11",
-    "@types/react-dom": "^16.9.4",
-    "cra-preact": "^0.4.0",
-    "gl-matrix": "^3.1.0",
-    "preact-render-to-string": "^5.1.21",
-    "promptpay-qr": "^0.4.4",
-    "qrcode": "0.9.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-scripts": "^5.0.1",
-    "react-snapshot": "^1.3.0",
-    "reakit": "^1.0.0-beta.11",
-    "typescript": "^3.7.2"
-  },
+  "version": "0.1.0",
   "scripts": {
-    "start": "cra-preact start",
-    "start-server": "env PORT=3000 http-server build",
-    "build": "cra-preact build",
+    "dev": "vite",
+    "build": "tsc && vite build",
     "test": "playwright test",
-    "eject": "react-scripts eject"
+    "preview": "vite preview --port 3000"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "preact": "^10.5.15",
+    "promptpay-qr": "^0.5.0",
+    "qrcode": "0.9.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.21.0",
-    "http-server": "^0.11.1",
-    "mkdirp": "^0.5.1",
+    "@playwright/test": "^1.21.1",
+    "@preact/preset-vite": "^2.1.5",
+    "@types/gl-matrix": "^3.2.0",
+    "@types/node": "^17.0.25",
+    "autoprefixer": "^10.4.5",
+    "gl-matrix": "^3.4.3",
+    "postcss": "^8.4.12",
+    "prettier": "^2.6.2",
     "start-server-and-test": "^1.14.0",
-    "tailwindcss": "^3.0.24"
+    "tailwindcss": "^3.0.24",
+    "typescript": "^4.5.4",
+    "vite": "^2.9.5",
+    "vite-plugin-pwa": "^0.12.0"
   }
 }

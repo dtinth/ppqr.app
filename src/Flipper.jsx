@@ -1,4 +1,4 @@
-import React from 'react'
+import { Component } from 'preact'
 
 // Flipper is a component that has two sides: front-side and back-side.
 // User can use swipe horizontally to access the other side.
@@ -8,7 +8,7 @@ import React from 'react'
 // - `flipped` Whether to display front or back side.
 // - `onFlip(flipped)` Called when user initiates a flip.
 //
-class Flipper extends React.Component {
+class Flipper extends Component {
   componentDidMount() {
     this.animator = createFlipperModel((degrees) => {
       this.el.style.transform = `rotateY(${degrees}deg)`

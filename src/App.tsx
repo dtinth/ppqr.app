@@ -1,4 +1,5 @@
-import React, { Component, useState, useEffect } from 'react'
+import { Component } from 'preact'
+import { useState, useEffect } from 'preact/hooks'
 
 import Flipper from './Flipper'
 import SlotSelector from './SlotSelector'
@@ -7,7 +8,7 @@ import QRCode from './QRCode'
 import { t, LocalizationProvider } from './Localization'
 import AppHeader from './AppHeader'
 
-const ver = require('promptpay-qr/package.json').version
+import { version } from 'promptpay-qr/package.json'
 
 const storageKeys = {
   1: 'promptpayID',
@@ -198,9 +199,9 @@ class AppMain extends Component {
             inputMode="decimal"
             step={0.01}
             min={0}
-            value={this.state.amount}
-            onChange={(e) => {
-              this.setState({ amount: +e.target.value })
+            defaultValue={this.state.amount.toString()}
+            onInput={(e) => {
+              this.setState({ amount: +(e.target as HTMLInputElement).value })
             }}
             autoFocus
           />{' '}
@@ -217,7 +218,7 @@ class AppMain extends Component {
           >
             promptpay-qr
           </a>
-          @{ver}
+          @{version}
         </div>
       </div>
     )

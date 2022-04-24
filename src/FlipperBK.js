@@ -1,13 +1,13 @@
 import React from 'react'
 
-// Flipper is a component that has two sides: front-side and back-side.
-// User can use swipe horizontally to access the other side.
-//
-// - `front` React element to display in the front side.
-// - `back` React element to display in the front side.
-// - `flipped` Whether to display front or back side.
-// - `onFlip(flipped)` Called when user initiates a flip.
-//
+/**  Flipper is a component that has two sides: front-side and back-side.
+ * User can use swipe horizontally to access the other side.
+ *
+ * - `front` React element to display in the front side.
+ * - `back` React element to display in the front side.
+ * - `flipped` Whether to display front or back side.
+ * - `onFlip(flipped)` Called when user initiates a flip.
+ */
 class Flipper extends React.Component {
   componentDidMount() {
     this.animator = createFlipperModel((degrees) => {

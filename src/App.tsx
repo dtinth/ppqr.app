@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from 'react'
 
-import Flipper from './Flipper'
+import Flipper from './FlipperBK'
 import SlotSelector from './SlotSelector'
 import generatePayload from 'promptpay-qr'
 import QRCode from './QRCode'

@@ -1,9 +1,9 @@
-import React, { PointerEventHandler, ReactNode } from 'react'
+import React, { PointerEventHandler, ReactNode, useEffect, useMemo, useRef } from 'react'
 import { IFlipperModel } from '../models'
 
 type FlipperProps = {
   flipped: boolean
-  onFlip: (x: boolean) => void
+  onFlip: (flipped: boolean) => void
   front: ReactNode
   back: ReactNode
 }
@@ -11,90 +11,95 @@ type FlipperProps = {
 /**  Flipper is a component that has two sides: front-side and back-side.
  * User can use swipe horizontally to access the other side.
  *
- * @param front - `front` React element to display in the front side.
- * @param back - `back` React element to display in the front side.
- *  - `flipped` Whether to display front or back side.
- * - `onFlip(flipped)` Called when user initiates a flip.
+ * @param props.front - React element to display in the front side.
+ * @param props.back - React element to display in the front side.
+ * @param props.flipped  - Whether to display front or back side.
+ * @param props.onFlip - `onFlip(flipped)` Called when user initiates a flip.
  */
-class Flipper extends React.Component<FlipperProps> {
-  private el: Nullable<HTMLElement> = null
-  // private animator: any = null // TODO: Don't be any
-  private animator: Nullable<IFlipperModel> = null
-  private activePointer: Nullable<{ pointerId: number, lastX: number }> = null
+const Flipper: React.FC<FlipperProps> = ({ flipped, onFlip, front, back }) => {
+  // let el: Nullable<HTMLElement> = null
+  const elRef = useRef<Nullable<HTMLDivElement>>(null)
+  // let animator: Nullable<IFlipperModel> = null
+  const animator = useRef<Nullable<IFlipperModel>>(null)
+  // const [animator, setAnimator] = useState<Nullable<IFlipperModel>>(null)
+  let activePointer: Nullable<{ pointerId: number; lastX: number }> = null
 
-  componentDidMount() {
-    this.animator = createFlipperModel((degrees: number) => {
-      if (this.el) {
-        this.el.style.transform = `rotateY(${degrees}deg)`
+  const animatorMemo = useMemo(() => animator, [animator])
+
+  useEffect(() => {
+    // setAnimator(
+    //   handleCreateFlipperModel((degrees: number) => {
+    //     if (elRef.current) {
+    //       elRef.current.style.transform = `rotateY(${degrees}deg)`
+    //     }
+    //   }, onFlip)
+    // )
+
+    animator.current = createFlipperModel((degrees: number) => {
+      if (elRef.current && animator.current) {
+        elRef.current.style.transform = `rotateY(${degrees}deg); rotateX(${degrees}deg)`
+        animator.current.setFlipped?.(flipped)
       }
+    }, onFlip)
 
-    }, this.onFlip)
-    this.animator.setFlipped(!!this.props.flipped)
-  }
-  componentDidUpdate(prevProps: FlipperProps) {
-    if (prevProps.flipped !== this.props.flipped) {
-      this.animator?.setFlipped(!!this.props.flipped)
+  }, [flipped, onFlip])
+
+  const handlePointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
+    if (!activePointer) {
+      activePointer = { pointerId: e.pointerId, lastX: e.clientX }
+      animator.current?.pointerDown()
     }
   }
-  // TODO: Ask P'Thai for this type, is it properly?
-  onFlip: FlipperProps['onFlip'] = (flipped) => {
-    if (this.props.onFlip) this.props.onFlip(flipped)
-  }
-  onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
-    if (!this.activePointer) {
-      this.activePointer = { pointerId: e.pointerId, lastX: e.clientX }
-      this.animator?.pointerDown()
-    }
-  }
-  onPointerMove: PointerEventHandler<HTMLDivElement> = (e) => {
-    if (!this.activePointer) return
-    if (this.activePointer.pointerId !== e.pointerId) return
+  const handlePointerMove: PointerEventHandler<HTMLDivElement> = (e) => {
+    if (!activePointer) return
+    if (activePointer.pointerId !== e.pointerId) return
     const delta =
-      ((e.clientX - this.activePointer.lastX) / (this.el as HTMLDivElement).offsetWidth) * 180
-    this.activePointer.lastX = e.clientX
-    this.animator?.pointerMove(delta)
+      ((e.clientX - activePointer.lastX) / ((elRef.current as HTMLDivElement)?.offsetWidth || 1)) *
+      180
+    activePointer.lastX = e.clientX
+    animator.current?.pointerMove(delta)
   }
-  onPointerUp: PointerEventHandler<HTMLDivElement> = (e) => {
-    this.animator?.pointerUp()
-    this.activePointer = null
+  const handlePointerUp: PointerEventHandler<HTMLDivElement> = (e) => {
+    animator.current?.pointerUp()
+    activePointer = null
   }
-  onPointerCancel: PointerEventHandler<HTMLDivElement> = (e) => {
-    this.animator?.pointerUp()
-    this.activePointer = null
+  const handlePointerCancel: PointerEventHandler<HTMLDivElement> = (e) => {
+    animator.current?.pointerUp()
+    activePointer = null
   }
-  render() {
-    return (
-      <div
-        style={{ touchAction: 'pan-y' }}
-        // @ts-expect-error
-        // TODO: Fix `touchAction` error
-        touchAction="pan-y"
-        onPointerDown={this.onPointerDown}
-        onPointerMove={this.onPointerMove}
-        onPointerUp={this.onPointerUp}
-        onPointerCancel={this.onPointerCancel}
-      >
-        <div className={'Flipper' + (this.props.flipped ? ' is-flipped' : '')}>
-          <div
-            className="Flipperのrotor"
-            ref={(el) => {
-              this.el = el
-            }}
-          >
-            <div className="Flipperのfront">{this.props.front}</div>
-            <div className="Flipperのback">{this.props.back}</div>
-          </div>
+
+  return (
+    <div
+      style={{ touchAction: 'pan-y' }}
+      // @ts-expect-error
+      // TODO: Fix `touchAction` error
+      touchAction="pan-y"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
+    >
+      <div className={'Flipper' + (flipped ? ' is-flipped' : '')}>
+        <div
+          className="Flipperのrotor"
+          ref={elRef}
+        >
+          <div className="Flipperのfront">{front}</div>
+          <div className="Flipperのback">{back}</div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default Flipper
 
 // TODO: Re-typing for `setRotationDegrees`, use specific function type
 // This model object takes care of the state and animation and handles input.
-function createFlipperModel(setRotationDegrees: (x: number) => void, onFlip: (x: boolean) => void): IFlipperModel {
+function createFlipperModel(
+  setRotationDegrees: (x: number) => void,
+  onFlip: (flippped: boolean) => void,
+): IFlipperModel {
   // XXX: A lot of mutable variables here!!!
   //      If you are up for a challenge, please help clean up this code!
 
@@ -114,7 +119,7 @@ function createFlipperModel(setRotationDegrees: (x: number) => void, onFlip: (x:
   const acceleration: number = 0.7
 
   // Animation parameters...
-  let animationActive = false
+  let animationActive: boolean = false
   let animationStartTime: number = Date.now()
   let lastFrameNumber: number = 0
 

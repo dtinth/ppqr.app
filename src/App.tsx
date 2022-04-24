@@ -10,6 +10,8 @@ import AppHeader from './AppHeader'
 
 import { version } from 'promptpay-qr/package.json'
 
+import './App.css'
+
 const storageKeys = {
   1: 'promptpayID',
   2: 'promptpayID2',

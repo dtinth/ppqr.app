@@ -2,7 +2,8 @@ import React, { ReactNode, useEffect, useRef } from 'react'
 import { JSX } from 'preact'
 import { IFlipperModel } from '../models'
 
-type PreactPointerEventHandler<T extends HTMLElement> = JSX.EventHandler<JSX.TargetedPointerEvent<T>>
+type PreactPointerEventHandler<E extends HTMLElement> = JSX.EventHandler<JSX.TargetedPointerEvent<E>>
+
 type FlipperProps = {
   flipped: boolean
   onFlip: (flipped: boolean) => void
@@ -61,8 +62,9 @@ const Flipper: React.FC<FlipperProps> = ({ flipped, onFlip, front, back }) => {
   return (
     <div
       style={{ touchAction: 'pan-y' }}
+      // @ts-expect-error
+      // TODO: Fix error for `touchAction`
       touchAction="pan-y"
-      // TODO: Fix these events type error
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}

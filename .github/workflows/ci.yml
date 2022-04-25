@@ -29,7 +29,7 @@ jobs:
       - name: Install Playwright
         run: yarn playwright install
       - name: Test
-        run: yarn start-server-and-test start-server http://localhost:3000 test
+        run: yarn start-server-and-test preview http://localhost:3000 test
       - name: Percy
         run: npx @percy/cli upload e2e/screenshots/
         env:

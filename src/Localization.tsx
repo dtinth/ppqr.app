@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useCallback } from 'react'
+import { createContext } from 'preact'
+import { useContext, useCallback } from 'preact/hooks'
 
 const localizationContext = createContext('th')
 

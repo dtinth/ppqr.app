@@ -1,8 +1,8 @@
-import React, { ReactNode } from 'react'
+import { Component } from 'preact'
 import './AppHeader.css'
 import logo from './logo.svg'
 
-export default function AppHeader(props: { rightContent?: ReactNode }) {
+export default function AppHeader(props: { rightContent?: Component }) {
   return (
     <div className="AppHeader">
       <img alt="" src={logo} />

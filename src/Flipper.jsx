@@ -1,120 +1,106 @@
-import React, { ReactNode, useEffect, useRef } from 'react'
-import { JSX } from 'preact'
-import { IFlipperModel } from '../models'
+import { Component } from 'preact'
 
-type PreactPointerEventHandler<T extends HTMLElement> = JSX.EventHandler<JSX.TargetedPointerEvent<T>>
-type FlipperProps = {
-  flipped: boolean
-  onFlip: (flipped: boolean) => void
-  front: ReactNode
-  back: ReactNode
-}
-
-/**  Flipper is a component that has two sides: front-side and back-side.
- * User can use swipe horizontally to access the other side.
- *
- * @param props.front - React element to display in the front side.
- * @param props.back - React element to display in the front side.
- * @param props.flipped  - Whether to display front or back side.
- * @param props.onFlip - `onFlip(flipped)` Called when user initiates a flip.
- */
-const Flipper: React.FC<FlipperProps> = ({ flipped, onFlip, front, back }) => {
-  const elRef = useRef<HTMLDivElement>(null)
-  const animatorRef = useRef<Nullable<IFlipperModel>>(null)
-  let activePointer: Nullable<{ pointerId: number; lastX: number }> = null
-
-  useEffect(() => {
-    if (!animatorRef.current) {
-      animatorRef.current = createFlipperModel((degrees: number) => {
-        if (elRef.current) {
-          elRef.current.style.transform = `rotateY(${degrees}deg);`
-        }
-      }, onFlip)
-      animatorRef.current.setFlipped?.(!!flipped)
-    }
-  }, [flipped, onFlip])
-
-  const handlePointerDown: PreactPointerEventHandler<HTMLDivElement> = (e) => {
-    if (!activePointer) {
-      activePointer = { pointerId: e.pointerId, lastX: e.clientX }
-      animatorRef.current?.pointerDown()
+// Flipper is a component that has two sides: front-side and back-side.
+// User can use swipe horizontally to access the other side.
+//
+// - `front` React element to display in the front side.
+// - `back` React element to display in the front side.
+// - `flipped` Whether to display front or back side.
+// - `onFlip(flipped)` Called when user initiates a flip.
+//
+class Flipper extends Component {
+  componentDidMount() {
+    this.animator = createFlipperModel((degrees) => {
+      this.el.style.transform = `rotateY(${degrees}deg)`
+    }, this.onFlip)
+    this.animator.setFlipped(!!this.props.flipped)
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.flipped !== this.props.flipped) {
+      this.animator.setFlipped(!!this.props.flipped)
     }
   }
-  const handlePointerMove: PreactPointerEventHandler<HTMLDivElement> = (e) => {
-    if (!activePointer) return
-    if (activePointer.pointerId !== e.pointerId) return
+  onFlip = (flipped) => {
+    if (this.props.onFlip) this.props.onFlip(flipped)
+  }
+  onPointerDown = (e) => {
+    if (!this.activePointer) {
+      this.activePointer = { pointerId: e.pointerId, lastX: e.clientX }
+      this.animator.pointerDown()
+    }
+  }
+  onPointerMove = (e) => {
+    if (!this.activePointer) return
+    if (this.activePointer.pointerId !== e.pointerId) return
     const delta =
-      ((e.clientX - activePointer.lastX) / ((elRef.current as HTMLDivElement)?.offsetWidth || 1)) *
-      180
-    activePointer.lastX = e.clientX
-    animatorRef.current?.pointerMove(delta)
+      ((e.clientX - this.activePointer.lastX) / this.el.offsetWidth) * 180
+    this.activePointer.lastX = e.clientX
+    this.animator.pointerMove(delta)
   }
-  const handlePointerUp: PreactPointerEventHandler<HTMLDivElement> = (e) => {
-    animatorRef.current?.pointerUp()
-    activePointer = null
+  onPointerUp = (e) => {
+    this.animator.pointerUp()
+    this.activePointer = null
   }
-  const handlePointerCancel: PreactPointerEventHandler<HTMLDivElement> = (e) => {
-    animatorRef.current?.pointerUp()
-    activePointer = null
+  onPointerCancel = (e) => {
+    this.animator.pointerUp()
+    this.activePointer = null
   }
-
-  return (
-    <div
-      style={{ touchAction: 'pan-y' }}
-      touchAction="pan-y"
-      // TODO: Fix these events type error
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerCancel}
-    >
-      <div className={'Flipper' + (flipped ? ' is-flipped' : '')}>
-        <div
-          className="Flipperのrotor"
-          ref={elRef}
-        >
-          <div className="Flipperのfront">{front}</div>
-          <div className="Flipperのback">{back}</div>
+  render() {
+    return (
+      <div
+        style={{ touchAction: 'pan-y' }}
+        touchAction="pan-y"
+        onPointerDown={this.onPointerDown}
+        onPointerMove={this.onPointerMove}
+        onPointerUp={this.onPointerUp}
+        onPointerCancel={this.onPointerCancel}
+      >
+        <div className={'Flipper' + (this.props.flipped ? ' is-flipped' : '')}>
+          <div
+            className="Flipperのrotor"
+            ref={(el) => {
+              this.el = el
+            }}
+          >
+            <div className="Flipperのfront">{this.props.front}</div>
+            <div className="Flipperのback">{this.props.back}</div>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
 export default Flipper
 
-// TODO: Re-typing for `setRotationDegrees`, use specific function type
 // This model object takes care of the state and animation and handles input.
-function createFlipperModel(
-  setRotationDegrees: (x: number) => void,
-  onFlip: (flippped: boolean) => void,
-): IFlipperModel {
+function createFlipperModel(setRotationDegrees, onFlip) {
   // XXX: A lot of mutable variables here!!!
   //      If you are up for a challenge, please help clean up this code!
 
-  /** Current rotation to be rendered (degrees) */
-  let current: number = 0
+  // Current rotation to be rendered (degrees)
+  let current = 0
 
-  /** Target rotation (degrees) */
-  let target: number = 0
+  // Target rotation (degrees)
+  let target = 0
 
-  /** Current rotation speed (degrees/frame) */
-  let currentSpeed: number = 0
+  // Current rotation speed (degrees/frame)
+  let currentSpeed = 0
 
-  /** Spring strength */
-  const springK: number = 1 / 15
+  // Spring strength
+  const springK = 1 / 15
 
-  /** Rotation acceleration (degrees/frame^2) */
-  const acceleration: number = 0.7
+  // Rotation acceleration (degrees/frame^2)
+  const acceleration = 0.7
 
   // Animation parameters...
-  let animationActive: boolean = false
-  let animationStartTime: number = Date.now()
-  let lastFrameNumber: number = 0
+  let animationActive = false
+  let animationStartTime = Date.now()
+  let lastFrameNumber = 0
 
-  /** State of dragging */
+  // State of dragging
   let pointerIsDown = false
-  let history: any[] = []
+  let history = []
 
   // Returns whether an animation should run.
   function shouldAnimate() {
@@ -165,7 +151,7 @@ function createFlipperModel(
   }
 
   // Linearly approach target by at most delta.
-  function linearlyApproach(current: number, target: number, delta: number) {
+  function linearlyApproach(current, target, delta) {
     if (Math.abs(current - target) < delta) {
       return target
     } else if (current < target) {
@@ -182,10 +168,10 @@ function createFlipperModel(
 
   // Based on current animation state, simulate the projected rotation angle
   // if we allow the spinning to stop without intervention.
-  function getProjection(): number {
-    let projection: number = current
-    let speed: number = currentSpeed
-    for (let i: number = 0; i < 600; i++) {
+  function getProjection() {
+    let projection = current
+    let speed = currentSpeed
+    for (let i = 0; i < 600; i++) {
       const targetSpeed = speed * (1 - springK)
       speed = linearlyApproach(speed, targetSpeed, acceleration)
       projection += speed
@@ -194,14 +180,14 @@ function createFlipperModel(
   }
 
   // Based on the animation target angle, are we showing the back side?
-  function isFlipped(angle: number): boolean {
+  function isFlipped(angle) {
     return Math.round(angle / 180) % 2 !== 0
   }
 
   // Flips the flipper (if necessary).
   //
   // - `flipped` Set to true to display the backside or false for front side.
-  function flip(flipped: boolean): void {
+  function flip(flipped) {
     const projection = getProjection()
     target = getTargetAngle(projection, flipped)
     updateAnimation()
@@ -209,7 +195,7 @@ function createFlipperModel(
 
   // Based on the projected angle `projection` and desired `flipped` state,
   // determine the optimal angle to rotate the flipper to.
-  function getTargetAngle(projection: number, flipped: boolean): number {
+  function getTargetAngle(projection, flipped) {
     const offset = flipped ? 180 : 0
     return Math.round((projection - offset - 1) / 360) * 360 + offset
   }

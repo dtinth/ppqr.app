@@ -1,4 +1,4 @@
-import React, { PointerEventHandler, ReactNode, useEffect, useMemo, useRef } from 'react'
+import React, { PointerEventHandler, ReactNode, useEffect, useRef } from 'react'
 import { IFlipperModel } from '../models'
 
 type FlipperProps = {
@@ -17,37 +17,25 @@ type FlipperProps = {
  * @param props.onFlip - `onFlip(flipped)` Called when user initiates a flip.
  */
 const Flipper: React.FC<FlipperProps> = ({ flipped, onFlip, front, back }) => {
-  // let el: Nullable<HTMLElement> = null
-  const elRef = useRef<Nullable<HTMLDivElement>>(null)
-  // let animator: Nullable<IFlipperModel> = null
-  const animator = useRef<Nullable<IFlipperModel>>(null)
-  // const [animator, setAnimator] = useState<Nullable<IFlipperModel>>(null)
+  const elRef = useRef<HTMLDivElement>(null)
+  const animatorRef = useRef<Nullable<IFlipperModel>>(null)
   let activePointer: Nullable<{ pointerId: number; lastX: number }> = null
 
-  const animatorMemo = useMemo(() => animator, [animator])
-
   useEffect(() => {
-    // setAnimator(
-    //   handleCreateFlipperModel((degrees: number) => {
-    //     if (elRef.current) {
-    //       elRef.current.style.transform = `rotateY(${degrees}deg)`
-    //     }
-    //   }, onFlip)
-    // )
-
-    animator.current = createFlipperModel((degrees: number) => {
-      if (elRef.current && animator.current) {
-        elRef.current.style.transform = `rotateY(${degrees}deg); rotateX(${degrees}deg)`
-        animator.current.setFlipped?.(flipped)
-      }
-    }, onFlip)
-
+    if (!animatorRef.current) {
+      animatorRef.current = createFlipperModel((degrees: number) => {
+        if (elRef.current) {
+          elRef.current.style.transform = `rotateY(${degrees}deg);`
+        }
+      }, onFlip)
+      animatorRef.current.setFlipped?.(!!flipped)
+    }
   }, [flipped, onFlip])
 
   const handlePointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
     if (!activePointer) {
       activePointer = { pointerId: e.pointerId, lastX: e.clientX }
-      animator.current?.pointerDown()
+      animatorRef.current?.pointerDown()
     }
   }
   const handlePointerMove: PointerEventHandler<HTMLDivElement> = (e) => {
@@ -57,14 +45,14 @@ const Flipper: React.FC<FlipperProps> = ({ flipped, onFlip, front, back }) => {
       ((e.clientX - activePointer.lastX) / ((elRef.current as HTMLDivElement)?.offsetWidth || 1)) *
       180
     activePointer.lastX = e.clientX
-    animator.current?.pointerMove(delta)
+    animatorRef.current?.pointerMove(delta)
   }
   const handlePointerUp: PointerEventHandler<HTMLDivElement> = (e) => {
-    animator.current?.pointerUp()
+    animatorRef.current?.pointerUp()
     activePointer = null
   }
   const handlePointerCancel: PointerEventHandler<HTMLDivElement> = (e) => {
-    animator.current?.pointerUp()
+    animatorRef.current?.pointerUp()
     activePointer = null
   }
 

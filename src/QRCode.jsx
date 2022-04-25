@@ -1,8 +1,8 @@
-import React from 'react'
+import { Component } from 'preact'
 import qr from 'qrcode'
 import createPixelsRenderer from './createPixelsRenderer'
 
-class QRCode extends React.Component {
+class QRCode extends Component {
   state = { svg: '' }
   componentDidMount() {
     this.renderer = createPixelsRenderer(this.div)
@@ -53,7 +53,7 @@ class QRCode extends React.Component {
     return (
       <div
         className="qrcode"
-        ref={div => {
+        ref={(div) => {
           this.div = div
         }}
       />

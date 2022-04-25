@@ -3,14 +3,14 @@ import './SlotSelector.css'
 export function SlotSelector(props) {
   return (
     <div className="SlotSelector">
-      {[1, 2, 3, 4].map(i => {
+      {[1, 2, 3, 4].map((i) => {
         return (
           <button
             key={i}
             className={
               'SlotSelectorのitem' + (props.active === i ? ' is-active' : '')
             }
-            onClick={e => props.onSelect(i, e)}
+            onClick={(e) => props.onSelect(i, e)}
           >
             <span className="SlotSelectorのnum">{i}</span>
             <span className="SlotSelectorのinfo">

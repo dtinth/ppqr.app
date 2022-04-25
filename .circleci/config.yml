@@ -24,7 +24,7 @@ jobs:
       - run:
           command: yarn build
       - run:
-          command: env PORT=3000 yarn http-server build
+          command: yarn preview
           background: true
       - run:
           command: yarn playwright install

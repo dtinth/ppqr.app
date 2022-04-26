@@ -201,7 +201,11 @@ class AppMain extends Component {
             inputMode="decimal"
             step={0.01}
             min={0}
-            defaultValue={this.state.amount.toString()}
+            defaultValue={
+              this.state.amount.toString() === '0'
+                ? undefined
+                : this.state.amount.toString()
+            }
             onInput={(e) => {
               this.setState({ amount: +(e.target as HTMLInputElement).value })
             }}

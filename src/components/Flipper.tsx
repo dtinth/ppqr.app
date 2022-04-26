@@ -1,5 +1,5 @@
-import React, { ReactNode, useEffect, useRef } from 'react'
-import { JSX } from 'preact'
+import { JSX, FunctionalComponent, ComponentChildren } from 'preact'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { IFlipperModel } from '../models'
 
 type PreactPointerEventHandler<E extends HTMLElement> = JSX.EventHandler<JSX.TargetedPointerEvent<E>>
@@ -7,8 +7,8 @@ type PreactPointerEventHandler<E extends HTMLElement> = JSX.EventHandler<JSX.Tar
 type FlipperProps = {
   flipped: boolean
   onFlip: (flipped: boolean) => void
-  front: ReactNode
-  back: ReactNode
+  front: ComponentChildren
+  back: ComponentChildren
 }
 
 /**  Flipper is a component that has two sides: front-side and back-side.
@@ -19,7 +19,7 @@ type FlipperProps = {
  * @param props.flipped  - Whether to display front or back side.
  * @param props.onFlip - `onFlip(flipped)` Called when user initiates a flip.
  */
-const Flipper: React.FC<FlipperProps> = ({ flipped, onFlip, front, back }) => {
+const Flipper: FunctionalComponent<FlipperProps> = ({ flipped, onFlip, front, back }) => {
   const elRef = useRef<HTMLDivElement>(null)
   const animatorRef = useRef<Nullable<IFlipperModel>>(null)
   let activePointer: Nullable<{ pointerId: number; lastX: number }> = null
@@ -31,8 +31,8 @@ const Flipper: React.FC<FlipperProps> = ({ flipped, onFlip, front, back }) => {
           elRef.current.style.transform = `rotateY(${degrees}deg);`
         }
       }, onFlip)
-      animatorRef.current.setFlipped?.(!!flipped)
     }
+    animatorRef.current.setFlipped(!!flipped)
   }, [flipped, onFlip])
 
   const handlePointerDown: PreactPointerEventHandler<HTMLDivElement> = (e) => {

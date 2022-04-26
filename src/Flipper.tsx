@@ -1,8 +1,5 @@
-import { JSX, FunctionalComponent, ComponentChildren } from 'preact'
-import { useEffect, useRef, useState } from 'preact/hooks'
-import { IFlipperModel } from './models'
-
-type PreactPointerEventHandler<E extends HTMLElement> = JSX.EventHandler<JSX.TargetedPointerEvent<E>>
+import { FunctionalComponent, ComponentChildren } from 'preact'
+import { useEffect, useRef } from 'preact/hooks'
 import { IFlipperModel } from './ModelFlipper'
 
 type FlipperProps = {
@@ -53,11 +50,11 @@ useEffect(() => {
     activePointer.lastX = e.clientX
     animatorRef.current?.pointerMove(delta)
   }
-  const handlePointerUp: PreactPointerEventHandler<HTMLDivElement> = (e) => {
+  const handlePointerUp: PreactPointerEventHandler<HTMLDivElement> = (_e) => {
     animatorRef.current?.pointerUp()
     activePointer = null
   }
-  const handlePointerCancel: PreactPointerEventHandler<HTMLDivElement> = (e) => {
+  const handlePointerCancel: PreactPointerEventHandler<HTMLDivElement> = (_e) => {
     animatorRef.current?.pointerUp()
     activePointer = null
   }
@@ -115,7 +112,7 @@ function createFlipperModel(
 
   /** State of dragging */
   let pointerIsDown = false
-  let history: any[] = []
+  let history: { time: number, current: number }[] = []
 
   // Returns whether an animation should run.
   function shouldAnimate() {

@@ -1,8 +1,9 @@
 import { JSX, FunctionalComponent, ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { IFlipperModel } from '../models'
+import { IFlipperModel } from './models'
 
 type PreactPointerEventHandler<E extends HTMLElement> = JSX.EventHandler<JSX.TargetedPointerEvent<E>>
+import { IFlipperModel } from './ModelFlipper'
 
 type FlipperProps = {
   flipped: boolean
@@ -24,16 +25,18 @@ const Flipper: FunctionalComponent<FlipperProps> = ({ flipped, onFlip, front, ba
   const animatorRef = useRef<Nullable<IFlipperModel>>(null)
   let activePointer: Nullable<{ pointerId: number; lastX: number }> = null
 
-  useEffect(() => {
-    if (!animatorRef.current) {
-      animatorRef.current = createFlipperModel((degrees: number) => {
-        if (elRef.current) {
-          elRef.current.style.transform = `rotateY(${degrees}deg);`
-        }
-      }, onFlip)
-    }
-    animatorRef.current.setFlipped(!!flipped)
-  }, [flipped, onFlip])
+useEffect(() => {
+  let flipperDegree: number = 0
+  if (!animatorRef.current) {
+    animatorRef.current = createFlipperModel(((degrees: number) => {
+      flipperDegree = degrees
+    }), onFlip)
+  }
+  if (elRef.current) {
+    elRef.current.style.transform = `rotateY(${flipperDegree});`
+  }
+  animatorRef.current.setFlipped(!!flipped)
+}, [flipped, onFlip])
 
   const handlePointerDown: PreactPointerEventHandler<HTMLDivElement> = (e) => {
     if (!activePointer) {
@@ -62,9 +65,6 @@ const Flipper: FunctionalComponent<FlipperProps> = ({ flipped, onFlip, front, ba
   return (
     <div
       style={{ touchAction: 'pan-y' }}
-      // @ts-expect-error
-      // TODO: Fix error for `touchAction`
-      touchAction="pan-y"
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
@@ -85,10 +85,9 @@ const Flipper: FunctionalComponent<FlipperProps> = ({ flipped, onFlip, front, ba
 
 export default Flipper
 
-// TODO: Re-typing for `setRotationDegrees`, use specific function type
 // This model object takes care of the state and animation and handles input.
 function createFlipperModel(
-  setRotationDegrees: (x: number) => void,
+  setRotationDegrees: (degrees: number) => void,
   onFlip: (flippped: boolean) => void,
 ): IFlipperModel {
   // XXX: A lot of mutable variables here!!!

@@ -2,7 +2,7 @@ import { Component } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
 
 // import Flipper from './FlipperBK'
-import Flipper from './components/Flipper'
+import Flipper from './Flipper'
 import SlotSelector from './SlotSelector'
 import generatePayload from 'promptpay-qr'
 import QRCode from './QRCode'

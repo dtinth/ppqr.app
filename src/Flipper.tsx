@@ -23,14 +23,12 @@ const Flipper: FunctionalComponent<FlipperProps> = ({ flipped, onFlip, front, ba
   let activePointer: Nullable<{ pointerId: number; lastX: number }> = null
 
 useEffect(() => {
-  let flipperDegree: number = 0
   if (!animatorRef.current) {
     animatorRef.current = createFlipperModel(((degrees: number) => {
-      flipperDegree = degrees
+      if (elRef.current) {
+        elRef.current.style.transform = `rotateY(${degrees}deg)`
+      }
     }), onFlip)
-  }
-  if (elRef.current) {
-    elRef.current.style.transform = `rotateY(${flipperDegree});`
   }
   animatorRef.current.setFlipped(!!flipped)
 }, [flipped, onFlip])

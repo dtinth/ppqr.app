@@ -9,7 +9,8 @@ type FlipperProps = {
   back: ComponentChildren
 }
 
-/**  Flipper is a component that has two sides: front-side and back-side.
+/**
+ * Flipper is a component that has two sides: front-side and back-side.
  * User can use swipe horizontally to access the other side.
  *
  * @param props.front - React element to display in the front side.
@@ -17,21 +18,22 @@ type FlipperProps = {
  * @param props.flipped  - Whether to display front or back side.
  * @param props.onFlip - `onFlip(flipped)` Called when user initiates a flip.
  */
-const Flipper: FunctionalComponent<FlipperProps> = ({ flipped, onFlip, front, back }) => {
+const Flipper: FunctionalComponent<FlipperProps> = (props) => {
+  const { flipped, onFlip, front, back } = props
   const elRef = useRef<HTMLDivElement>(null)
   const animatorRef = useRef<Nullable<IFlipperModel>>(null)
   let activePointer: Nullable<{ pointerId: number; lastX: number }> = null
 
-useEffect(() => {
-  if (!animatorRef.current) {
-    animatorRef.current = createFlipperModel(((degrees: number) => {
-      if (elRef.current) {
-        elRef.current.style.transform = `rotateY(${degrees}deg)`
-      }
-    }), onFlip)
-  }
-  animatorRef.current.setFlipped(!!flipped)
-}, [flipped, onFlip])
+  useEffect(() => {
+    if (!animatorRef.current) {
+      animatorRef.current = createFlipperModel((degrees: number) => {
+        if (elRef.current) {
+          elRef.current.style.transform = `rotateY(${degrees}deg)`
+        }
+      }, onFlip)
+    }
+    animatorRef.current.setFlipped(!!flipped)
+  }, [flipped, onFlip])
 
   const handlePointerDown: PreactPointerEventHandler<HTMLDivElement> = (e) => {
     if (!activePointer) {
@@ -43,7 +45,8 @@ useEffect(() => {
     if (!activePointer) return
     if (activePointer.pointerId !== e.pointerId) return
     const delta =
-      ((e.clientX - activePointer.lastX) / ((elRef.current as HTMLDivElement)?.offsetWidth || 1)) *
+      ((e.clientX - activePointer.lastX) /
+        ((elRef.current as HTMLDivElement)?.offsetWidth || 1)) *
       180
     activePointer.lastX = e.clientX
     animatorRef.current?.pointerMove(delta)
@@ -52,7 +55,9 @@ useEffect(() => {
     animatorRef.current?.pointerUp()
     activePointer = null
   }
-  const handlePointerCancel: PreactPointerEventHandler<HTMLDivElement> = (_e) => {
+  const handlePointerCancel: PreactPointerEventHandler<HTMLDivElement> = (
+    _e,
+  ) => {
     animatorRef.current?.pointerUp()
     activePointer = null
   }
@@ -66,10 +71,7 @@ useEffect(() => {
       onPointerCancel={handlePointerCancel}
     >
       <div className={'Flipper' + (flipped ? ' is-flipped' : '')}>
-        <div
-          className="Flipperのrotor"
-          ref={elRef}
-        >
+        <div className="Flipperのrotor" ref={elRef}>
           <div className="Flipperのfront">{front}</div>
           <div className="Flipperのback">{back}</div>
         </div>
@@ -110,7 +112,7 @@ function createFlipperModel(
 
   /** State of dragging */
   let pointerIsDown = false
-  let history: { time: number, current: number }[] = []
+  let history: { time: number; current: number }[] = []
 
   // Returns whether an animation should run.
   function shouldAnimate() {

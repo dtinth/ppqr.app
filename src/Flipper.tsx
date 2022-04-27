@@ -22,7 +22,8 @@ const Flipper: FunctionalComponent<FlipperProps> = (props) => {
   const { flipped, onFlip, front, back } = props
   const elRef = useRef<HTMLDivElement>(null)
   const animatorRef = useRef<Nullable<IFlipperModel>>(null)
-  let activePointer: Nullable<{ pointerId: number; lastX: number }> = null
+  const activePointerRef =
+    useRef<Nullable<{ pointerId: number; lastX: number }>>(null)
 
   useEffect(() => {
     if (!animatorRef.current) {
@@ -36,13 +37,14 @@ const Flipper: FunctionalComponent<FlipperProps> = (props) => {
   }, [flipped, onFlip])
 
   const handlePointerDown: PreactPointerEventHandler<HTMLDivElement> = (e) => {
-    if (!activePointer) {
-      activePointer = { pointerId: e.pointerId, lastX: e.clientX }
+    if (!activePointerRef.current) {
+      activePointerRef.current = { pointerId: e.pointerId, lastX: e.clientX }
       animatorRef.current?.pointerDown()
     }
   }
   const handlePointerMove: PreactPointerEventHandler<HTMLDivElement> = (e) => {
-    if (!activePointer) return
+    if (!activePointerRef.current) return
+    const activePointer = activePointerRef.current
     if (activePointer.pointerId !== e.pointerId) return
     const delta =
       ((e.clientX - activePointer.lastX) /
@@ -53,13 +55,13 @@ const Flipper: FunctionalComponent<FlipperProps> = (props) => {
   }
   const handlePointerUp: PreactPointerEventHandler<HTMLDivElement> = (_e) => {
     animatorRef.current?.pointerUp()
-    activePointer = null
+    activePointerRef.current = null
   }
   const handlePointerCancel: PreactPointerEventHandler<HTMLDivElement> = (
     _e,
   ) => {
     animatorRef.current?.pointerUp()
-    activePointer = null
+    activePointerRef.current = null
   }
 
   return (

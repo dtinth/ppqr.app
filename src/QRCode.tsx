@@ -23,10 +23,10 @@ const QRCode: FunctionalComponent<QRCodeProps> = ({ payload }) => {
   }, [payload])
 
   function update(updatingPayload: QRCodeProps['payload']) {
-    payloadRef.current = payload
+    payloadRef.current = updatingPayload
 
     qr.toString(
-      payload,
+      updatingPayload,
       { type: 'svg', errorCorrectionLevel: 'L' },
       (err, svg) => {
         if (err) {

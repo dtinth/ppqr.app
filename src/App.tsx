@@ -12,6 +12,7 @@ import AppHeader from './AppHeader'
 import { version } from 'promptpay-qr/package.json'
 
 import './App.css'
+import { isQueryFlagEnabled } from './QueryFlags'
 
 const storageKeys = {
   1: 'promptpayID',
@@ -27,7 +28,13 @@ function sanitizeId(id: string) {
 function App() {
   type AppStage = 'loading' | 'onboarding' | 'main'
   const [stage, setStage] = useState<AppStage>('loading')
-  const [language] = useState('th')
+  const [language] = useState(
+    isQueryFlagEnabled('detectlang')
+      ? String(navigator.language).match(/th/)
+        ? 'th'
+        : 'en'
+      : 'th',
+  )
 
   // const languageSwitcher = useMemo(() => {
   //   const switchLanguage = () => setLanguage(language === 'th' ? 'en' : 'th')

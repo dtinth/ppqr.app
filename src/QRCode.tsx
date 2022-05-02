@@ -14,12 +14,13 @@ const QRCode: FunctionalComponent<QRCodeProps> = ({ payload }) => {
   const payloadRef = useRef<Nullable<QRCodeProps['payload']>>(null)
 
   useEffect(() => {
-    if (!rendererRef.current) {
-      rendererRef.current = createPixelsRenderer(qrCodeRef.current!)
-    }
-    update(payload)
+    const renderer = createPixelsRenderer(qrCodeRef.current!)
+    rendererRef.current = renderer
+    return () => renderer.dispose()
+  }, [])
 
-    return () => rendererRef.current?.dispose()
+  useEffect(() => {
+    update(payload)
   }, [payload])
 
   function update(updatingPayload: QRCodeProps['payload']) {

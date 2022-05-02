@@ -11,7 +11,6 @@ const QRCode: FunctionalComponent<QRCodeProps> = ({ payload }) => {
   const qrCodeRef = useRef<HTMLDivElement>(null)
   const rendererRef =
     useRef<Nullable<ReturnType<typeof createPixelsRenderer>>>(null)
-  const payloadRef = useRef<Nullable<QRCodeProps['payload']>>(null)
 
   useEffect(() => {
     const renderer = createPixelsRenderer(qrCodeRef.current!)
@@ -20,21 +19,18 @@ const QRCode: FunctionalComponent<QRCodeProps> = ({ payload }) => {
   }, [])
 
   useEffect(() => {
-    update(payload)
-  }, [payload])
-
-  function update(updatingPayload: QRCodeProps['payload']) {
-    payloadRef.current = updatingPayload
-
+    let payloadChanged = false
     qr.toString(
-      updatingPayload,
+      payload,
       { type: 'svg', errorCorrectionLevel: 'L' },
       (err, svg) => {
         if (err) {
           window.alert('Cannot generate QR code: ' + String(err))
           return
         }
-        if (updatingPayload === payload) {
+
+        // Do not continue if the payload is changed while rendering the QR code.
+        if (!payloadChanged) {
           const sizeMatch = /width="(\d+)" height="(\d+)"/.exec(svg)
           if (!sizeMatch) {
             console.log(svg)
@@ -56,7 +52,11 @@ const QRCode: FunctionalComponent<QRCodeProps> = ({ payload }) => {
         }
       },
     )
-  }
+    return () => {
+      payloadChanged = true
+    }
+  }, [payload])
+
   return <div className="qrcode" ref={qrCodeRef} />
 }
 

@@ -1,5 +1,5 @@
-import { Component, FunctionalComponent } from 'preact'
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { FunctionalComponent } from 'preact'
+import { useEffect, useRef } from 'preact/hooks'
 import * as qr from 'qrcode'
 import createPixelsRenderer from './createPixelsRenderer'
 

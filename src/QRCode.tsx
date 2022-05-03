@@ -1,7 +1,7 @@
 import { FunctionalComponent } from 'preact'
 import { useEffect, useRef } from 'preact/hooks'
 import * as qr from 'qrcode'
-import createPixelsRenderer from './createPixelsRenderer'
+import createPixelsRenderer, { PixelPosition } from './createPixelsRenderer'
 
 type QRCodeProps = {
   payload: string | qr.QRCodeSegment[]
@@ -40,7 +40,7 @@ const QRCode: FunctionalComponent<QRCodeProps> = ({ payload }) => {
           const width = Number(sizeMatch[1]) / 4
           const height = Number(sizeMatch[2]) / 4
           const regexp = /x="(\d+)" y="(\d+)"/g
-          const pixels: { x: number; y: number }[] = []
+          const pixels: PixelPosition[] = []
           for (;;) {
             const m: RegExpExecArray = regexp.exec(svg)!
             if (!m) break

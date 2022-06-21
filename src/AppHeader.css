@@ -2,16 +2,7 @@
   max-width: 440px;
   margin: 0 auto;
   display: flex;
-  height: 40px;
   align-items: center;
-}
-.AppHeader > img {
-  height: 40px;
-  width: 40px;
-}
-.AppHeader > h1 {
-  margin: 0;
-  font-size: 1em;
 }
 .AppHeaderのrightContent {
   margin-left: auto;

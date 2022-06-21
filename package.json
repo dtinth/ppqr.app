@@ -9,6 +9,8 @@
     "preview": "vite preview --port 3000"
   },
   "dependencies": {
+    "@fontsource/noto-sans-thai": "^4.5.9",
+    "@fontsource/roboto": "^4.5.7",
     "preact": "^10.5.15",
     "promptpay-qr": "^0.5.0",
     "qrcode": "0.9.0"

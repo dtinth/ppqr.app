@@ -26,3 +26,6 @@ dist-ssr
 build
 e2e/screenshots
 e2e/error-shots
+/test-results/
+/playwright-report/
+/playwright/.cache/

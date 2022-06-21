@@ -1,13 +1,12 @@
 import { Component } from 'preact'
-import './AppHeader.css'
 import logo from './logo.svg'
 
 export default function AppHeader(props: { rightContent?: Component }) {
   return (
-    <div className="AppHeader h-12">
+    <div className="max-w-[440px] mx-auto h-12 flex items-center">
       <img className="w-12 h-12" alt="" src={logo} />
       <h1 className="font-bold">ppqr.app</h1>
-      <div className="AppHeaderのrightContent">{props.rightContent}</div>
+      <div className="ml-auto self-stretch">{props.rightContent}</div>
     </div>
   )
 }

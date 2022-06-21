@@ -11,7 +11,6 @@ import AppHeader from './AppHeader'
 import { version } from 'promptpay-qr/package.json'
 
 import './App.css'
-import { isQueryFlagEnabled } from './packlets/query-flags'
 
 const storageKeys = {
   1: 'promptpayID',

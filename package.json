@@ -16,7 +16,7 @@
     "qrcode": "0.9.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.21.1",
+    "@playwright/test": "^1.22.2",
     "@preact/preset-vite": "^2.1.5",
     "@types/gl-matrix": "^3.2.0",
     "@types/node": "^17.0.25",

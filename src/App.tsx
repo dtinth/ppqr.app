@@ -1,5 +1,5 @@
-import { Component } from 'preact'
-import { useState, useEffect } from 'preact/hooks'
+import { Component, FunctionalComponent, VNode } from 'preact'
+import { useState, useEffect, useCallback } from 'preact/hooks'
 
 import Flipper from './Flipper'
 import SlotSelector from './SlotSelector'
@@ -11,6 +11,7 @@ import AppHeader from './AppHeader'
 import { version } from 'promptpay-qr/package.json'
 
 import './App.css'
+import { isQueryFlagEnabled } from './packlets/query-flags'
 
 const storageKeys = {
   1: 'promptpayID',
@@ -28,19 +29,6 @@ function App() {
   const [stage, setStage] = useState<AppStage>('loading')
   const [language] = useState('th')
 
-  // const languageSwitcher = useMemo(() => {
-  //   const switchLanguage = () => setLanguage(language === 'th' ? 'en' : 'th')
-  //   return (
-  //     <Button
-  //       as="div"
-  //       style={{ padding: '0 10px', display: 'flex', alignItems: 'center' }}
-  //       onClick={switchLanguage}
-  //     >
-  //       {language}
-  //     </Button>
-  //   )
-  // }, [language])
-
   useEffect(() => {
     setStage('main')
   }, [])
@@ -56,46 +44,44 @@ function App() {
   )
 }
 
-class AppMain extends Component {
-  state = this.getInitialState()
-  getInitialState() {
-    const slotNumber = +window.localStorage.promptPayActiveSlot || 1
-    const data = Object.fromEntries(
+const AppMain: FunctionalComponent = () => {
+  const [slotNumber, setSlotNumber] = useState(
+    +window.localStorage.promptPayActiveSlot || 1,
+  )
+  const [data, setData] = useState(
+    Object.fromEntries(
       Object.entries(storageKeys).map(([index, storageKey]) => [
         index,
         sanitizeId(window.localStorage[storageKey] || ''),
       ]),
-    )
-
-    return {
-      data: data,
-      slotNumber: slotNumber as 1 | 2 | 3 | 4,
-      amount: 0,
-      flipped: false,
-    }
-  }
-  componentDidMount() {
+    ),
+  )
+  const [amount, setAmount] = useState(0)
+  const [flipped, setFlipped] = useState(false)
+  useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search)
     const amount = +(searchParams.get('amount') ?? '0')
-    if (amount) this.setState({ amount })
+    if (amount) setAmount(amount)
+  }, [])
+  const getId = () => {
+    return data[slotNumber]
   }
-  onSet = () => {
+  const onSet = () => {
     const id = window.prompt(
       'Your PromptPay ID (phone number or e-Wallet ID)',
-      this.getId(),
+      getId(),
     )
     if (id != null) {
       const sanitizedId = sanitizeId(id)
-      const n = this.state.slotNumber
-      this.setState({ data: { ...this.state.data, [n]: sanitizedId } })
-      window.localStorage[storageKeys[n]] = sanitizedId
+      const n = slotNumber
+      setData((d) => ({ ...d, [n]: sanitizedId }))
+      window.localStorage[storageKeys[n as keyof typeof storageKeys]] =
+        sanitizedId
     }
   }
-  onFlip = (flipped: boolean) => {
-    this.setState({ flipped })
-  }
-  onSelectSlot = (slot: number) => {
-    this.setState({ slotNumber: slot, flipped: false })
+  const onSelectSlot = (slot: number) => {
+    setSlotNumber(slot)
+    setFlipped(false)
     window.localStorage.promptPayActiveSlot = slot
     if (window.gtag) {
       window.gtag('event', 'select', {
@@ -104,38 +90,12 @@ class AppMain extends Component {
       })
     }
   }
-  getId() {
-    return this.state.data[this.state.slotNumber]
-  }
-  renderQR() {
-    const id = this.getId()
-    if (!id) {
-      return (
-        <button className="err" onClick={this.onSet}>
-          <span className="err-text">
-            {t('กดที่นี่เพื่อตั้งค่ารหัสพร้อมเพย์', 'Tap to set PromptPay ID')}
-          </span>
-        </button>
-      )
-    } else {
-      const payload = generatePayload(id, { amount: this.state.amount })
-      return (
-        <div
-          className="qrcode-container"
-          onClick={this.onSet}
-          data-promptpay-id={id}
-          data-slot={this.state.slotNumber}
-        >
-          <QRCode payload={payload} />
-        </div>
-      )
-    }
-  }
-  renderExplanation() {
-    if (this.state.flipped) {
+
+  const renderExplanation = () => {
+    if (flipped) {
       return <span>{t('เลือกตำแหน่งข้อมูล', 'Select a data slot')}</span>
     }
-    const id = this.getId()
+    const id = getId()
     if (!id) {
       return (
         <span>
@@ -160,75 +120,101 @@ class AppMain extends Component {
                 'QR code contains your phone number',
               )}
           :{' '}
-          <strong
-            onClick={this.onSet}
-            style={{ color: '#bef', cursor: 'pointer' }}
-          >
+          <strong onClick={onSet} style={{ color: '#bef', cursor: 'pointer' }}>
             {id}
           </strong>
         </span>
       )
     }
   }
-  renderSlotSelector() {
-    return (
-      <SlotSelector
-        active={this.state.slotNumber}
-        data={this.state.data}
-        onSelect={this.onSelectSlot}
+
+  return (
+    <div className="App">
+      <Flipper
+        front={
+          <AppQR
+            id={getId()}
+            amount={amount}
+            slotNumber={slotNumber}
+            onSet={onSet}
+          />
+        }
+        back={
+          <SlotSelector
+            active={slotNumber}
+            data={data}
+            onSelect={onSelectSlot}
+          />
+        }
+        flipped={flipped}
+        onFlip={setFlipped}
       />
-    )
-  }
-  render() {
-    return (
-      <div className="App">
-        <Flipper
-          front={this.renderQR()}
-          back={this.renderSlotSelector()}
-          flipped={this.state.flipped}
-          onFlip={this.onFlip}
-        />
-        <div className="qr-explanation">{this.renderExplanation()}</div>
-        <form
+      <div className="qr-explanation">{renderExplanation()}</div>
+      <form
+        className="amount"
+        onSubmit={(e) => {
+          e.preventDefault()
+        }}
+      >
+        <input
           className="amount"
-          onSubmit={(e) => {
-            e.preventDefault()
+          type="number"
+          inputMode="decimal"
+          step={0.01}
+          min={0}
+          defaultValue={amount.toString() === '0' ? '' : amount.toString()}
+          onInput={(e) => {
+            setAmount(+(e.target as HTMLInputElement).value)
           }}
+          autoFocus
+        />{' '}
+        {t('บาท', 'THB')}
+      </form>
+      <div className="tip">
+        <strong>Tip: </strong>Add to home screen for easier access
+        <br />
+        Powered by{' '}
+        <a
+          href="https://github.com/dtinth/promptpay-qr"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          <input
-            className="amount"
-            type="number"
-            inputMode="decimal"
-            step={0.01}
-            min={0}
-            defaultValue={
-              this.state.amount.toString() === '0'
-                ? undefined
-                : this.state.amount.toString()
-            }
-            onInput={(e) => {
-              this.setState({ amount: +(e.target as HTMLInputElement).value })
-            }}
-            autoFocus
-          />{' '}
-          {t('บาท', 'THB')}
-        </form>
-        <div className="tip">
-          <strong>Tip: </strong>Add to home screen for easier access
-          <br />
-          Powered by{' '}
-          <a
-            href="https://github.com/dtinth/promptpay-qr"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            promptpay-qr
-          </a>
-          @{version}
-        </div>
+          promptpay-qr
+        </a>
+        @{version}
+      </div>
+    </div>
+  )
+}
+
+interface AppQR {
+  id: string
+  amount: number
+  slotNumber: number
+  onSet: () => void
+}
+const AppQR: FunctionalComponent<AppQR> = (props) => {
+  const { id, amount, onSet, slotNumber } = props
+  if (!id) {
+    return (
+      <button className="err" onClick={onSet}>
+        <span className="err-text">
+          {t('กดที่นี่เพื่อตั้งค่ารหัสพร้อมเพย์', 'Tap to set PromptPay ID')}
+        </span>
+      </button>
+    )
+  } else {
+    const payload = generatePayload(id, { amount })
+    return (
+      <div
+        className="qrcode-container"
+        onClick={onSet}
+        data-promptpay-id={id}
+        data-slot={slotNumber}
+      >
+        <QRCode payload={payload} />
       </div>
     )
   }
 }
-
 export default App

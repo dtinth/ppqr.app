@@ -158,12 +158,6 @@ body {
   image-rendering: pixelated;
 }
 
-.qr-explanation {
-  margin: 5px auto 20px;
-  color: #8b8685;
-  font-size: 12px;
-}
-
 @keyframes here-be-qr {
   0% {
     transform: rotate(-480deg) scale(0);

@@ -119,16 +119,16 @@ const AppMain: FunctionalComponent = () => {
                 'QR code contains your phone number',
               )}
           :{' '}
-          <strong onClick={onSet} style={{ color: '#bef', cursor: 'pointer' }}>
+          <button onClick={onSet} className="text-[#bbeeff] font-bold">
             {id}
-          </strong>
+          </button>
         </span>
       )
     }
   }
 
   return (
-    <div className="App">
+    <div className="text-center">
       <Flipper
         front={
           <AppQR
@@ -148,26 +148,57 @@ const AppMain: FunctionalComponent = () => {
         flipped={flipped}
         onFlip={setFlipped}
       />
-      <div className="qr-explanation">{renderExplanation()}</div>
+      <div
+        data-testid="qr-explanation"
+        className="mt-1 mb-5 text-xs text-[#8b8685]"
+      >
+        {renderExplanation()}
+      </div>
       <form
-        className="amount"
         onSubmit={(e) => {
           e.preventDefault()
+          ;(e.target as HTMLInputElement | HTMLElement).blur?.()
         }}
       >
-        <input
-          className="amount"
-          type="number"
-          inputMode="decimal"
-          step={0.01}
-          min={0}
-          defaultValue={amount.toString() === '0' ? '' : amount.toString()}
-          onInput={(e) => {
-            setAmount(+(e.target as HTMLInputElement).value)
-          }}
-          autoFocus
-        />{' '}
-        {t('บาท', 'THB')}
+        <div>
+          <label htmlFor="amount" className="block pb-2 text-[#8b8685]">
+            {t('กรอกจำนวนเงิน', 'Enter Amount')}
+          </label>
+          <div className="mx-auto w-[200px] flex bg-[#252423] px-5 py-2 gap-2 items-center rounded-xl border border-[#8b8685]">
+            <span className="flex-1">
+              <input
+                id="amount"
+                className="w-full block text-[#d7fc70] bg-transparent text-right text-3xl"
+                type="number"
+                inputMode="decimal"
+                step={0.01}
+                min={0}
+                autoComplete="off"
+                defaultValue={
+                  amount.toString() === '0' ? '' : amount.toString()
+                }
+                onInput={(e) => {
+                  setAmount(+(e.target as HTMLInputElement).value)
+                }}
+                autoFocus
+              />
+            </span>
+            <span
+              className="flex-none text-[#8b8685]"
+              onClick={() => {
+                const input = document.getElementById(
+                  'amount',
+                ) as HTMLInputElement | null
+                if (input) {
+                  input.focus()
+                  input.select()
+                }
+              }}
+            >
+              {t('บาท', 'THB')}
+            </span>
+          </div>
+        </div>
       </form>
       <div className="tip">
         <strong>Tip: </strong>Add to home screen for easier access

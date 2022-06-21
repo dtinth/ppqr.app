@@ -16,6 +16,9 @@ export default defineConfig({
     preact(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg,woff2}'],
+      },
       manifest: {
         short_name: 'ppqr.app',
         name: 'ppqr.app',

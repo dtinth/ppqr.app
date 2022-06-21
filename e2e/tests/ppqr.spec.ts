@@ -35,3 +35,19 @@ test('saves PromptPay ID', async ({ page }) => {
   await page.reload()
   await ppqr.expectExplanation('QR code มีเบอร์โทรศัพท์ของคุณ: 0812345678')
 })
+
+test('works offline', async ({ page }) => {
+  const ppqr = new Ppqr(page)
+  await ppqr.goto()
+  await ppqr.setPromptPayId('0812345678')
+  const failed: string[] = []
+  await page.context().setOffline(true)
+  page.context().on('requestfailed', (r) => {
+    if (r.url().startsWith('http://localhost')) {
+      failed.push(r.url() + ' ' + r.failure()!.errorText)
+    }
+  })
+  await page.reload()
+  await ppqr.expectExplanation('QR code มีเบอร์โทรศัพท์ของคุณ: 0812345678')
+  expect(failed).toHaveLength(0)
+})

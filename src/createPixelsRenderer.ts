@@ -40,7 +40,7 @@ export default function createPixelsRenderer(el: HTMLDivElement) {
     drawMask(w)
     // TODO: `webkitMaskImage` is deprecated, maybe use `maskImage` instead
     maskDiv.style.webkitMaskImage = `url("${maskCanvas.toDataURL()}")`
-    maskDiv.style.webkitMaskSize = `cover`
+    maskDiv.style.webkitMaskImage = `cover`
   }
 
   function drawMask(size: number) {

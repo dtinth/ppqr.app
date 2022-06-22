@@ -1,16 +1,15 @@
-import { Component, FunctionalComponent, VNode } from 'preact'
-import { useState, useEffect, useCallback } from 'preact/hooks'
+import { FunctionalComponent } from 'preact'
+import { useEffect, useState } from 'preact/hooks'
 
-import Flipper from './Flipper'
-import SlotSelector from './SlotSelector'
 import generatePayload from 'promptpay-qr'
-import QRCode from './QRCode'
-import { t, LocalizationProvider } from './Localization'
 import AppHeader from './AppHeader'
-
-import { version } from 'promptpay-qr/package.json'
+import Flipper from './Flipper'
+import { LocalizationProvider, t } from './Localization'
+import QRCode from './QRCode'
+import SlotSelector from './SlotSelector'
 
 import './App.css'
+import { SettingsButton, SettingsView } from './packlets/settings'
 
 const storageKeys = {
   1: 'promptpayID',
@@ -34,11 +33,12 @@ function App() {
 
   return (
     <div>
-      <AppHeader />
+      <AppHeader rightContent={<SettingsButton />} />
       <LocalizationProvider value={language}>
         {stage === 'main' && <AppMain />}
         {stage === 'loading' && <p className="loading">Loading...</p>}
       </LocalizationProvider>
+      <SettingsView />
     </div>
   )
 }
@@ -200,19 +200,6 @@ const AppMain: FunctionalComponent = () => {
           </div>
         </div>
       </form>
-      <div className="tip">
-        <strong>Tip: </strong>Add to home screen for easier access
-        <br />
-        Powered by{' '}
-        <a
-          href="https://github.com/dtinth/promptpay-qr"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          promptpay-qr
-        </a>
-        @{version}
-      </div>
     </div>
   )
 }

@@ -183,14 +183,3 @@ body {
   color: #d7fc70;
   text-align: right;
 }
-
-.tip {
-  font-size: 12px;
-  margin: 20px 0;
-  color: #8b8685;
-}
-
-.tip a {
-  color: #9b9695;
-  text-decoration: none;
-}

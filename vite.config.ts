@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 
 import preact from '@preact/preset-vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,6 +12,14 @@ export default defineConfig({
   },
   build: {
     outDir: 'build',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          ui: ['focus-trap-react', 'preact', 'preact/hooks', 'preact/compat'],
+          qr: ['gl-matrix', 'promptpay-qr', 'qrcode'],
+        },
+      },
+    },
   },
   plugins: [
     preact(),
@@ -40,5 +49,6 @@ export default defineConfig({
         background_color: '#353433',
       },
     }),
+    visualizer(),
   ],
 })

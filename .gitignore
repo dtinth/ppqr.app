@@ -41,3 +41,5 @@ e2e/error-shots
 # Documentation here: https://yarnpkg.com/features/zero-installs
 !.yarn/cache
 #.pnp.*
+
+/stats.html

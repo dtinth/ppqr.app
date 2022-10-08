@@ -1,5 +1,5 @@
 import { ComponentChildren } from 'preact'
-import { logo } from './packlets/branding'
+import { logo } from '../../packlets/branding'
 
 export default function AppHeader(props: { rightContent?: ComponentChildren }) {
   return (

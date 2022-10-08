@@ -1,12 +1,25 @@
-import './SlotSelector.css'
+import { FunctionComponent, JSX } from 'preact'
 
-export function SlotSelector(props) {
+import '../styles/SlotSelector.css'
+
+interface Props {
+  active: number
+  onSelect(
+    index: number,
+    event: JSX.TargetedMouseEvent<HTMLButtonElement>,
+  ): void
+  data: {
+    [key: string]: string
+  }
+}
+
+export const SlotSelector: FunctionComponent<Props> = (props) => {
   return (
     <div className="SlotSelector">
       {[1, 2, 3, 4].map((i) => {
         return (
           <button
-            key={i}
+            key={`SlotSelector-${i}`}
             className={
               'SlotSelectorのitem' + (props.active === i ? ' is-active' : '')
             }
@@ -22,7 +35,7 @@ export function SlotSelector(props) {
     </div>
   )
 
-  function renderInfo(data) {
+  function renderInfo(data: string) {
     if (!data) {
       return 'Empty slot'
     }

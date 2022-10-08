@@ -1,7 +1,9 @@
 import { FunctionalComponent } from 'preact'
 import { useEffect, useRef } from 'preact/hooks'
 import * as qr from 'qrcode'
-import createPixelsRenderer, { PixelPosition } from './createPixelsRenderer'
+import createPixelsRenderer, {
+  PixelPosition,
+} from '../services/createPixelsRenderer'
 
 type QRCodeProps = {
   payload: string | qr.QRCodeSegment[]

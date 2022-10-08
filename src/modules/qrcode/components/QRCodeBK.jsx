@@ -1,6 +1,6 @@
 import { Component } from 'preact'
 import qr from 'qrcode'
-import createPixelsRenderer from './createPixelsRenderer'
+import createPixelsRenderer from '.../services/createPixelsRenderer'
 
 class QRCode extends Component {
   state = { svg: '' }

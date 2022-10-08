@@ -30,7 +30,7 @@ export const AppMain: FunctionalComponent = () => {
       'Your PromptPay ID (phone number or e-Wallet ID)',
     )
 
-    if (answeredPromptpayId != null) {
+    if (answeredPromptpayId !== null && answeredPromptpayId !== '') {
       const sanitizedId = sanitizeId(answeredPromptpayId)
 
       setData((d) => ({ ...d, [slotNumber]: sanitizedId }))

@@ -1,7 +1,7 @@
 import { render } from 'preact'
 import { registerSW } from 'virtual:pwa-register'
 
-import App from './App'
+import { App } from './packlets/app/App'
 
 import '@fontsource/noto-sans-thai'
 import '@fontsource/roboto/latin-400.css'

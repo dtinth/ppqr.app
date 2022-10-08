@@ -1,13 +1,13 @@
 import { FunctionalComponent } from 'preact'
-import { useEffect, useState, useMemo } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 
 import { AppQR } from './AppQR'
-import { t } from '../../modules/localize/services/t'
-import Flipper from '../../modules/flipper/components/Flipper'
-import SlotSelector from '../../modules/slotSelector/components/SlotSelector'
+import { t } from '../../packlets/localize/t'
+import Flipper from '../../packlets/flipper/Flipper'
+import SlotSelector from '../../packlets/slotSelector/SlotSelector'
 
-import { storageKeys } from '../constants/storageKeys'
-import { sanitizeId } from '../services/sanitizeId'
+import { storageKeys } from './storageKeys'
+import { sanitizeId } from './sanitizeId'
 import { QRExplanation } from './QRExplanation'
 
 export const AppMain: FunctionalComponent = () => {

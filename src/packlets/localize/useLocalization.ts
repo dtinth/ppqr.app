@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'preact/hooks'
 
-import { localizationContext } from '../context/localizationContext'
+import { localizationContext } from './localizationContext'
 
 export function useLocalization(th: string, en: string) {
   const language = useContext(localizationContext)

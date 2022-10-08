@@ -3,8 +3,8 @@ import { useMemo } from 'preact/hooks'
 
 import generatePayload from 'promptpay-qr'
 
-import QRCode from '../../modules/qrcode/components/QRCode'
-import { t } from '../../modules/localize/services/t'
+import QRCode from '../../packlets/qrcode/QRCode'
+import { t } from '../../packlets/localize/t'
 
 interface Props {
   id: string

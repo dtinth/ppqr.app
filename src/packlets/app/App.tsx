@@ -2,10 +2,10 @@ import { useEffect, useState } from 'preact/hooks'
 
 import AppHeader from './AppHeader'
 import { AppMain } from './AppMain'
-import { LocalizationProvider } from '../../modules/localize/context/localizationContext'
+import { LocalizationProvider } from '../../packlets/localize/localizationContext'
 
-import '../styles/App.css'
-import { SettingsButton, SettingsView } from '../../packlets/settings'
+import './App.css'
+import { SettingsButton, SettingsView } from '../settings'
 
 export function App() {
   type AppStage = 'loading' | 'onboarding' | 'main'

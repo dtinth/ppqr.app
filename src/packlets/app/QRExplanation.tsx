@@ -1,6 +1,6 @@
-import { FunctionalComponent, Fragment } from 'preact'
+import { FunctionalComponent } from 'preact'
 
-import { t } from '../../modules/localize/services/t'
+import { t } from '../../packlets/localize/t'
 
 interface Props {
   flipped: boolean
@@ -17,7 +17,9 @@ export const QRExplanation: FunctionalComponent<Props> = (props) => {
       className="mt-1 mb-5 text-xs text-[#8b8685]"
     >
       {flipped ? (
-        <span key="exp-flipped">{t('เลือกตำแหน่งข้อมูล', 'Select a data slot')}</span>
+        <span key="exp-flipped">
+          {t('เลือกตำแหน่งข้อมูล', 'Select a data slot')}
+        </span>
       ) : !slotId ? (
         <span key="exp-empty">
           {t(

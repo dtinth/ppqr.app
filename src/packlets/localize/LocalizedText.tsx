@@ -1,4 +1,4 @@
-import { useLocalization } from '../services/useLocalization'
+import { useLocalization } from './useLocalization'
 
 export function LocalizedText(props: { th: string; en: string }) {
   const { main, sub } = useLocalization(props.th, props.en)

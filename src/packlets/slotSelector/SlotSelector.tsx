@@ -1,6 +1,6 @@
 import { FunctionComponent, JSX } from 'preact'
 
-import '../styles/SlotSelector.css'
+import './SlotSelector.css'
 
 interface Props {
   active: number

@@ -1,4 +1,4 @@
-import { FlipperModel } from '../@types/FlipperModel'
+import { FlipperModel } from './FlipperModel'
 
 // This model object takes care of the state and animation and handles input.
 export function createFlipperModel(

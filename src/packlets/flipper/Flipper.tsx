@@ -1,9 +1,9 @@
 import { FunctionalComponent, ComponentChildren } from 'preact'
 import { useEffect, useRef } from 'preact/hooks'
 
-import { createFlipperModel } from '../services/createFlipperModel'
+import { createFlipperModel } from './createFlipperModel'
 
-import { FlipperModel } from '../@types/FlipperModel'
+import { FlipperModel } from './FlipperModel'
 
 type FlipperProps = {
   flipped: boolean

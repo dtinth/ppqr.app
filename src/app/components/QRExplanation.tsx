@@ -17,16 +17,16 @@ export const QRExplanation: FunctionalComponent<Props> = (props) => {
       className="mt-1 mb-5 text-xs text-[#8b8685]"
     >
       {flipped ? (
-        <span>{t('เลือกตำแหน่งข้อมูล', 'Select a data slot')}</span>
+        <span key="exp-flipped">{t('เลือกตำแหน่งข้อมูล', 'Select a data slot')}</span>
       ) : !slotId ? (
-        <span>
+        <span key="exp-empty">
           {t(
             'กดที่กล่องข้างบน เพื่อใส่รหัสพร้อมเพย์ที่ใช้รับเงิน',
             'Tap above to get started',
           )}
         </span>
       ) : (
-        <span>
+        <span key="exp-qr">
           {slotId.length >= 15
             ? t(
                 'QR code มีรหัส e-Wallet ของคุณ',

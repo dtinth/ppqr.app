@@ -11,7 +11,7 @@ import { devices } from '@playwright/test'
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
-  testDir: './e2e/tests',
+  testDir: './tests',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
   expect: {
@@ -39,7 +39,9 @@ const config: PlaywrightTestConfig = {
     // baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
+    video: process.env.CI ? 'on' : 'off',
+    screenshot: process.env.CI ? 'on' : 'off',
   },
 
   /* Configure projects for major browsers */
@@ -98,10 +100,11 @@ const config: PlaywrightTestConfig = {
   // outputDir: 'test-results/',
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   port: 3000,
-  // },
+  webServer: {
+    command: 'yarn preview',
+    port: 8892,
+    reuseExistingServer: !process.env.CI,
+  },
 }
 
 export default config

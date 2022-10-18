@@ -3,7 +3,7 @@ import { test, expect, Page } from '@playwright/test'
 class Ppqr {
   constructor(private readonly page: Page) {}
   async goto() {
-    await this.page.goto('http://localhost:3000')
+    await this.page.goto('http://localhost:8892')
     await this.page.addStyleTag({ content: '.qr-explosion { display: none; }' })
   }
   async setPromptPayId(id: string) {

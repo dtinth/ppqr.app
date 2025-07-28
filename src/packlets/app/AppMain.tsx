@@ -3,6 +3,7 @@ import { useEffect, useState } from 'preact/hooks'
 
 import { AppQR } from './AppQR'
 import { t } from '../../packlets/localize/t'
+import { Calculator } from '../calculator/Calculator'
 import Flipper from '../../packlets/flipper/Flipper'
 import SlotSelector from '../../packlets/slotSelector/SlotSelector'
 
@@ -24,6 +25,7 @@ export const AppMain: FunctionalComponent = () => {
   )
   const [amount, setAmount] = useState(0)
   const [flipped, setFlipped] = useState(false)
+  const [showCalculator, setShowCalculator] = useState(false)
 
   const onSet = () => {
     const answeredPromptpayId = window.prompt(
@@ -126,9 +128,38 @@ export const AppMain: FunctionalComponent = () => {
             >
               {t('บาท', 'THB')}
             </span>
+            <button
+              type="button"
+              className="ml-2 text-[#8b8685]"
+              onClick={() => setShowCalculator(true)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 7h6m0 10v-2a2 2 0 00-2-2H9a2 2 0 00-2 2v2m0-10V5a2 2 0 012-2h2a2 2 0 012 2v2m-6 4h6m-6 4h6m-6-4h.01M9 16h.01"
+                />
+              </svg>
+            </button>
           </div>
         </div>
       </form>
+      {showCalculator && (
+        <Calculator
+          onClose={() => setShowCalculator(false)}
+          onSelect={(newAmount) => {
+            setAmount(newAmount)
+            setShowCalculator(false)
+          }}
+        />
+      )}
     </div>
   )
 }

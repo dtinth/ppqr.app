@@ -7,19 +7,21 @@ Install
 ---
 
 ```
-yarn
+npm install -g corepack
+corepack enable
+pnpm install
 ```
 
 Development
 ---
 
 ```
-yarn dev
+pnpm dev
 ```
 
 Build
 ---
 
 ```
-yarn build
+pnpm build
 ```

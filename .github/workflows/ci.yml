@@ -2,34 +2,36 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   test:
     name: Test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-          cache: yarn
+          node-version: 20
+          cache: pnpm
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
       - name: Build
-        run: yarn build
+        run: pnpm build
       - name: Install Playwright
-        run: yarn playwright install --with-deps
+        run: pnpm playwright install --with-deps
       - name: Test
-        run: yarn start-server-and-test preview http://localhost:3000 test
-      - uses: actions/upload-artifact@v2
+        run: pnpm start-server-and-test preview http://localhost:8892 test
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report

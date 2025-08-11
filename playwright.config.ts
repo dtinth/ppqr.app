@@ -103,7 +103,7 @@ const config: PlaywrightTestConfig = {
   webServer: {
     command: 'yarn preview',
     port: 8892,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
   },
 }
 

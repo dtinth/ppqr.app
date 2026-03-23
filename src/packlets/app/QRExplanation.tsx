@@ -9,7 +9,8 @@ interface Props {
 }
 
 export const QRExplanation: FunctionalComponent<Props> = (props) => {
-  const { flipped, slotId, onSet = () => {} } = props
+  const { flipped, slotId } = props
+  const onSet = () => props.onSet?.()
 
   return (
     <div
@@ -30,16 +31,13 @@ export const QRExplanation: FunctionalComponent<Props> = (props) => {
       ) : (
         <span key="exp-qr">
           {slotId.length >= 15
-            ? t(
-                'QR code มีรหัส e-Wallet ของคุณ',
-                'QR code contains your e-Wallet',
-              )
+            ? t('QR code มีรหัส e-Wallet ของคุณ', 'QR code contains your e-Wallet')
             : slotId.length >= 13
-            ? t('QR code มีเลขประจำตัวของคุณ', 'QR code contains your ID')
-            : t(
-                'QR code มีเบอร์โทรศัพท์ของคุณ',
-                'QR code contains your phone number',
-              )}
+              ? t('QR code มีเลขประจำตัวของคุณ', 'QR code contains your ID')
+              : t(
+                  'QR code มีเบอร์โทรศัพท์ของคุณ',
+                  'QR code contains your phone number',
+                )}
           :{' '}
           <button onClick={onSet} className="text-[#bbeeff] font-bold">
             {slotId}

@@ -8,24 +8,26 @@ This is a PromptPay QR code generator web app built with Preact and Vite. The ap
 
 ## Development Commands
 
-- **Development server**: `pnpm dev` (runs on port 8892)
-- **Build**: `pnpm build` (TypeScript compile + Vite build, outputs to `build/`)
-- **Tests**: `pnpm test` (Playwright e2e tests)
-- **Preview**: `pnpm preview` (serves built app on port 8892)
-
-Note: Project uses pnpm as package manager (pnpm@10.14.0+). The CI still references yarn commands but package.json uses pnpm.
+- **Install**: `vp install`
+- **Development server**: `vp dev --port 8892`
+- **Build**: `vp build` (outputs to `build/`)
+- **Checks**: `vp check`
+- **Built-in tests**: `vp test`
+- **Playwright e2e tests**: `vp run test`
+- **Preview**: `vp preview --port 8892`
 
 ## Testing
 
 - Uses Playwright for e2e testing configured in `playwright.config.ts`
 - Tests run against Mobile Chrome (Pixel 5) viewport
-- Test server runs `pnpm preview` on port 8892
+- Test server runs `vp preview --port 8892`
 - Tests located in `tests/` directory
 - CI runs tests with video/screenshot capture on failures
 
 ## Architecture
 
 ### Framework Stack
+
 - **Frontend**: Preact (React-like) with JSX
 - **Build tool**: Vite with esbuild
 - **Styling**: Tailwind CSS + PostCSS
@@ -33,6 +35,7 @@ Note: Project uses pnpm as package manager (pnpm@10.14.0+). The CI still referen
 - **Localization**: Custom context-based system (Thai/English)
 
 ### Code Organization ("Packlets" Architecture)
+
 Source code in `src/packlets/` is organized by feature modules:
 
 - `app/` - Main application components (App, AppMain, AppQR, AppHeader)
@@ -45,6 +48,7 @@ Source code in `src/packlets/` is organized by feature modules:
 - `query-flags/` - URL parameter handling
 
 ### Key Features
+
 - Multiple payment slots (stored in localStorage)
 - Amount specification via URL params or form input
 - Card flip interface between QR display and slot selection
@@ -52,11 +56,13 @@ Source code in `src/packlets/` is organized by feature modules:
 - PWA capabilities with offline support
 
 ### State Management
+
 - Uses Preact hooks (useState, useEffect) for local state
 - localStorage for persistence (payment IDs, active slot)
 - Custom external store pattern for some shared state
 
 ### Build Configuration
+
 - Manual chunk splitting: `ui` (Preact, focus-trap) and `qr` (gl-matrix, qr libraries)
 - Bundle analysis with rollup-plugin-visualizer
 - PWA manifest configured for standalone display

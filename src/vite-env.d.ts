@@ -1,8 +1,10 @@
-/// <reference types="vite/client" />
+/// <reference types="vite-plus/client" />
 /// <reference types="vite-plugin-pwa/client" />
 
+declare module '@fontsource/noto-sans-thai'
+
 declare module 'react-snapshot' {
-  export const render: typeof import('react-dom')['render']
+  export const render: (typeof import('react-dom'))['render']
 }
 
 declare module 'promptpay-qr' {

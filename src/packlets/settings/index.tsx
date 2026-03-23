@@ -7,7 +7,7 @@ import { version as promptpayQrVersion } from 'promptpay-qr/package.json'
 
 const displayedStore = new SyncExternalStore(false)
 
-export const SettingsButton: FunctionalComponent = (props) => (
+export const SettingsButton: FunctionalComponent = () => (
   <button
     className="block"
     title={'Settings & about'}
@@ -24,7 +24,7 @@ export const SettingsButton: FunctionalComponent = (props) => (
   </button>
 )
 
-const SettingsCloseButton: FunctionalComponent = (props) => (
+const SettingsCloseButton: FunctionalComponent = () => (
   <button
     className="block"
     title={'Back to app'}

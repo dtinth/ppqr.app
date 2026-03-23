@@ -16,21 +16,24 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
         with:
           node-version-file: .node-version
-          cache: pnpm
+          cache: true
+          run-install: false
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: vp install
+      - name: Check
+        run: vp check
       - name: Build
-        run: pnpm build
+        run: vp build
       - name: Install Playwright
-        run: pnpm playwright install --with-deps
-      - name: Test
-        run: pnpm start-server-and-test preview http://localhost:8892 test
+        run: vp exec playwright install --with-deps
+      - name: JavaScript tests
+        run: vp test
+      - name: End-to-end tests
+        run: vp run test
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -38,6 +41,6 @@ jobs:
           path: playwright-report/
           retention-days: 30
       - name: Percy
-        run: npx @percy/cli upload e2e/screenshots/
+        run: vp dlx @percy/cli upload e2e/screenshots/
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}

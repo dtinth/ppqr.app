@@ -1,5 +1,5 @@
 import { FunctionalComponent } from 'preact'
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import * as qr from 'qrcode'
 import createPixelsRenderer, { PixelPosition } from './createPixelsRenderer'
 import classes from './QRCodeHDR.module.css'
@@ -102,7 +102,7 @@ const QRCodeHDR: FunctionalComponent<QRCodeProps> = ({ payload }) => {
       if (unblocked) return
       const video = document.getElementById('qr-video') as HTMLVideoElement
       try {
-        video.play()
+        void video.play()
         unblocked = true
       } catch (e) {
         console.error('Unable to play video', e)

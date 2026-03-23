@@ -7,7 +7,7 @@ class Ppqr {
     await this.page.addStyleTag({ content: '.qr-explosion { display: none; }' })
   }
   async setPromptPayId(id: string) {
-    this.page.once('dialog', (d) => d.accept('0812345678'))
+    this.page.once('dialog', (d) => d.accept(id))
     await this.page.click('text=กดที่นี่เพื่อตั้งค่ารหัสพร้อมเพย์')
   }
   async expectExplanation(text: string) {

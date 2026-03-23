@@ -1,3 +1,3 @@
 tasks:
-  - init: yarn
-    command: yarn dev
+  - init: curl -fsSL https://vite.plus | bash && export PATH="$HOME/.vite-plus/bin:$PATH" && vp install
+    command: export PATH="$HOME/.vite-plus/bin:$PATH" && vp dev --port 8892

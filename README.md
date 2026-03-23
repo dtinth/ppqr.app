@@ -1,27 +1,30 @@
-ppqr.app
-===
+# ppqr.app
 
 PromptPay QR code generator webapp
 
-Install
----
+## Install
 
 ```
-npm install -g corepack
-corepack enable
-pnpm install
+curl -fsSL https://vite.plus | bash
+export PATH="$HOME/.vite-plus/bin:$PATH"
+vp install
 ```
 
-Development
----
+## Development
 
 ```
-pnpm dev
+vp dev --port 8892
 ```
 
-Build
----
+## Build
 
 ```
-pnpm build
+vp build
+```
+
+## Tests
+
+```
+vp test
+vp run test
 ```

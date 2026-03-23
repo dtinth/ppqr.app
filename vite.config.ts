@@ -1,22 +1,49 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite-plus'
 
 import preact from '@preact/preset-vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import { visualizer } from 'rollup-plugin-visualizer'
 
+const manualChunkGroups = {
+  ui: ['focus-trap-react', 'preact', 'preact/hooks', 'preact/compat'],
+  qr: ['gl-matrix', 'promptpay-qr', 'qrcode'],
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  esbuild: {
-    jsxFactory: 'h',
-    jsxFragment: 'Fragment',
+  staged: {
+    '*': 'vp check --fix',
+  },
+  lint: {
+    options: {
+      typeAware: true,
+      typeCheck: true,
+    },
+  },
+  fmt: {
+    singleQuote: true,
+    semi: false,
+    trailingComma: 'all',
+    printWidth: 80,
+    sortPackageJson: false,
+    ignorePatterns: [],
+  },
+  test: {
+    include: ['src/**/*.test.{ts,tsx}'],
+    exclude: ['tests/**'],
   },
   build: {
     outDir: 'build',
     rollupOptions: {
       output: {
-        manualChunks: {
-          ui: ['focus-trap-react', 'preact', 'preact/hooks', 'preact/compat'],
-          qr: ['gl-matrix', 'promptpay-qr', 'qrcode'],
+        manualChunks(id) {
+          for (const [chunkName, packages] of Object.entries(
+            manualChunkGroups,
+          )) {
+            if (packages.some((pkg) => id.includes(`/node_modules/${pkg}/`))) {
+              return chunkName
+            }
+          }
         },
       },
     },

@@ -3,41 +3,50 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "dev": "vite --host --port ${PORT:-8892}",
-    "build": "tsc && vite build",
+    "dev": "vp dev --host --port ${PORT:-8892}",
+    "build": "tsc && vp build",
     "test": "playwright test",
-    "preview": "vite preview --port ${PORT:-8892}"
+    "preview": "vp preview --port ${PORT:-8892}",
+    "prepare": "vp config"
   },
   "dependencies": {
     "@fontsource/noto-sans-thai": "^4.5.9",
     "@fontsource/roboto": "^4.5.7",
     "focus-trap-react": "^9.0.2",
-    "preact": "^10.5.15",
+    "preact": "^10.29.0",
     "promptpay-qr": "^0.5.0",
     "prop-types": "^15.8.1",
     "qrcode": "0.9.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "sync-external-store": "^1.0.0",
-    "use-sync-external-store": "^1.2.0"
+    "use-sync-external-store": "^1.6.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.54.2",
-    "@preact/preset-vite": "^2.10.2",
+    "@playwright/test": "^1.58.2",
+    "@preact/preset-vite": "^2.10.5",
     "@types/gl-matrix": "^3.2.0",
-    "@types/node": "^22.17.1",
+    "@types/node": "^25.5.0",
     "@types/qrcode": "^1.4.2",
     "@types/use-sync-external-store": "^0.0.3",
     "autoprefixer": "^10.4.5",
     "gl-matrix": "^3.4.3",
     "postcss": "^8.4.31",
-    "prettier": "^2.6.2",
     "rollup-plugin-visualizer": "^5.6.0",
-    "start-server-and-test": "^1.14.0",
     "tailwindcss": "^3.0.24",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.11",
+    "typescript": "^6.0.2",
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
     "vite-plugin-pwa": "^1.0.2",
+    "vite-plus": "latest",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@latest",
     "workbox-build": "^7.3.0",
     "workbox-window": "^7.3.0"
   },
-  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748"
+  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748",
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+      "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+    }
+  }
 }

@@ -1,4 +1,5 @@
 import { test, expect, Page } from '@playwright/test'
+import { storyboard } from './support'
 
 class Ppqr {
   constructor(private readonly page: Page) {}
@@ -22,6 +23,7 @@ test('generates a QR code', async ({ page }) => {
   await ppqr.goto()
   await ppqr.setPromptPayId('0812345678')
   await ppqr.expectExplanation('QR code มีเบอร์โทรศัพท์ของคุณ: 0812345678')
+  await storyboard.capture('QR code is shown', page)
   await page.screenshot({
     animations: 'disabled',
     path: 'e2e/screenshots/Main.png',
@@ -34,6 +36,7 @@ test('saves PromptPay ID', async ({ page }) => {
   await ppqr.setPromptPayId('0812345678')
   await page.reload()
   await ppqr.expectExplanation('QR code มีเบอร์โทรศัพท์ของคุณ: 0812345678')
+  await storyboard.capture('PromptPay ID is saved', page)
 })
 
 test('works offline', async ({ page }) => {
@@ -50,4 +53,5 @@ test('works offline', async ({ page }) => {
   await page.reload()
   await ppqr.expectExplanation('QR code มีเบอร์โทรศัพท์ของคุณ: 0812345678')
   expect(failed).toHaveLength(0)
+  await storyboard.capture('App still works offline', page)
 })

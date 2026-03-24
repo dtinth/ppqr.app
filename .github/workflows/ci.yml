@@ -38,7 +38,7 @@ jobs:
       - name: End-to-end tests
         run: vp run test
       - name: Publish storyboard
-        run: npx 'github:dtinth/publish-storyboard#main' --input=test-storyboards
+        run: vp dlx 'github:dtinth/publish-storyboard#main' --input=test-storyboards
       - uses: actions/upload-artifact@v4
         if: always()
         with:

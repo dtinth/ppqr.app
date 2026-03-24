@@ -28,6 +28,7 @@ e2e/screenshots
 e2e/error-shots
 /test-results/
 /playwright-report/
+/test-storyboards/
 /playwright/.cache/
 
 .yarn/*

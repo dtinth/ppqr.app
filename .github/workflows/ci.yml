@@ -6,6 +6,9 @@ on:
   pull_request:
     branches:
       - main
+permissions:
+  contents: read
+  id-token: write
 jobs:
   test:
     name: Test
@@ -34,6 +37,8 @@ jobs:
         run: vp test
       - name: End-to-end tests
         run: vp run test
+      - name: Publish storyboard
+        run: npx 'github:dtinth/publish-storyboard#main' --input=test-storyboards
       - uses: actions/upload-artifact@v4
         if: always()
         with:

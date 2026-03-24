@@ -82,6 +82,9 @@ importers:
       typescript:
         specifier: ^6.0.2
         version: 6.0.2
+      visual-storyboard:
+        specifier: 0.3.0
+        version: 0.3.0
       vite:
         specifier: npm:@voidzero-dev/vite-plus-core@latest
         version: '@voidzero-dev/vite-plus-core@0.1.13(@types/node@25.5.0)(terser@5.43.1)(typescript@6.0.2)'
@@ -2594,6 +2597,9 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  visual-storyboard@0.3.0:
+    resolution: {integrity: sha512-e0cFuMwC38aBKs3dq7I0lcbW8mDxB+zvOA3Hb/fCFZMJFYJGnEqH+Yltyqj2ziUMW/AXSNZ79hq/Rid0ZqtlNQ==}
 
   vite-plugin-pwa@1.0.2:
     resolution: {integrity: sha512-O3UwjsCnoDclgJANoOgzzqW7SFgwXE/th2OmUP/ILxHKwzWxxKDBu+B/Xa9Cv4IgSVSnj2HgRVIJ7F15+vQFkA==}
@@ -5305,6 +5311,8 @@ snapshots:
       react: 19.2.4
 
   util-deprecate@1.0.2: {}
+
+  visual-storyboard@0.3.0: {}
 
   vite-plugin-pwa@1.0.2(@voidzero-dev/vite-plus-core@0.1.13(@types/node@25.5.0)(terser@5.43.1)(typescript@6.0.2))(workbox-build@7.3.0)(workbox-window@7.3.0):
     dependencies:

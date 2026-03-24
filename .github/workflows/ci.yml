@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: vp build
       - name: Install Playwright
-        run: vp exec playwright install --with-deps
+        uses: dtinth/setup-playwright-test-docker@main
       - name: JavaScript tests
         run: vp test
       - name: End-to-end tests

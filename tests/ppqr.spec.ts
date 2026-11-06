@@ -55,3 +55,18 @@ test('works offline', async ({ page }) => {
   expect(failed).toHaveLength(0)
   await storyboard.capture('App still works offline', page)
 })
+
+test('rejects amounts outside 1.00 to 500,000.00', async ({ page }) => {
+  const ppqr = new Ppqr(page)
+  await ppqr.goto()
+  await ppqr.setPromptPayId('0812345678')
+  const error = page.getByRole('alert')
+  await page.fill('#amount', '500000.01')
+  await expect(error).toContainText('กรุณาเลือกจำนวนเงินตั้งแต่ 1.00 ถึง 500,000.00')
+  await page.fill('#amount', '0.5')
+  await expect(error).toBeVisible()
+  await page.fill('#amount', '500000')
+  await expect(error).toHaveCount(0)
+  await page.fill('#amount', '1')
+  await expect(error).toHaveCount(0)
+})

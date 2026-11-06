@@ -10,6 +10,13 @@ import { storageKeys } from './storageKeys'
 import { sanitizeId } from './sanitizeId'
 import { QRExplanation } from './QRExplanation'
 
+const MIN_AMOUNT = 1
+const MAX_AMOUNT = 500_000
+
+function isAmountInRange(amount: number) {
+  return amount === 0 || (amount >= MIN_AMOUNT && amount <= MAX_AMOUNT)
+}
+
 export const AppMain: FunctionalComponent = () => {
   const [slotNumber, setSlotNumber] = useState(
     +window.localStorage.promptPayActiveSlot || 1,
@@ -24,6 +31,7 @@ export const AppMain: FunctionalComponent = () => {
   )
   const [amount, setAmount] = useState(0)
   const [flipped, setFlipped] = useState(false)
+  const amountValid = isAmountInRange(amount)
 
   const onSet = () => {
     const answeredPromptpayId = window.prompt(
@@ -63,7 +71,7 @@ export const AppMain: FunctionalComponent = () => {
         front={
           <AppQR
             id={data[slotNumber]}
-            amount={amount}
+            amount={amountValid ? amount : 0}
             slotNumber={slotNumber}
             onSet={onSet}
           />
@@ -101,7 +109,10 @@ export const AppMain: FunctionalComponent = () => {
                 type="number"
                 inputMode="decimal"
                 step={0.01}
-                min={0}
+                min={MIN_AMOUNT}
+                max={MAX_AMOUNT}
+                aria-invalid={!amountValid}
+                aria-describedby={amountValid ? undefined : 'amount-error'}
                 autoComplete="off"
                 defaultValue={
                   amount.toString() === '0' ? '' : amount.toString()
@@ -127,6 +138,18 @@ export const AppMain: FunctionalComponent = () => {
               {t('บาท', 'THB')}
             </span>
           </div>
+          {!amountValid && (
+            <p
+              id="amount-error"
+              role="alert"
+              className="pt-2 text-sm text-[#ff8a80]"
+            >
+              {t(
+                'กรุณาเลือกจำนวนเงินตั้งแต่ 1.00 ถึง 500,000.00',
+                'Please enter an amount from 1.00 to 500,000.00',
+              )}
+            </p>
+          )}
         </div>
       </form>
     </div>

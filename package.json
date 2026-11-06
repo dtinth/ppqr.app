@@ -1,7 +1,7 @@
 {
   "name": "ppqr.app",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "dev": "vp dev --host --port ${PORT:-8892}",
     "build": "tsc && vp build",
